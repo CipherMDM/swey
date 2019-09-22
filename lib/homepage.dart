@@ -1,10 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permissions_kiosk/permissions_kiosk.dart';
 import 'package:sembast/sembast.dart';
-import 'package:sembast/sembast_io.dart';
+import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
+import 'package:swey/settingsconfig.dart';
 import 'package:swey/systemconfig.dart';
 import 'appdrawer.dart';
 import 'DataBase/AppDatabase.dart';
@@ -20,10 +21,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-  var store = StoreRef.main();
-  Database db; 
-  
 
  
   setupdialog(){
@@ -69,20 +66,35 @@ class _HomeState extends State<Home> {
 
 
  Future getApps()async{
+     db_handler.db = await AppDatabase.instance.database; 
+     db_handler.store = StoreRef.main();
+     db_handler.make();
 
     _getApps().then((apps){
 
-      List<Apps> _apps = [];
       List<Apps> __apps = [];
-      List<String> appName=[]; 
-     
+          
       for(int i=0;i<apps.length;i++){
+       
+        db_handler.store.record("Apps").get(db_handler.db).then((allowapps){
+          
+           if(allowapps.contains(apps[i].packageName)){
+            
+             SystemConfig.appNames.add(apps[i].packageName);
+             SystemConfig.apps.add(Apps(appIcon: Image.memory(apps[i].icon),appNmae: apps[i].appName,packageName: apps[i].packageName));
+          }
+        });
        
         __apps.add(Apps(appIcon: Image.memory(apps[i].icon),appNmae: apps[i].appName,packageName: apps[i].packageName));
         
       }
-      SystemConfig.form(_apps, appName ,null);
-      AllApps.form(__apps, null);
+
+      PermissionsKiosk.platformVersion.then((data){
+        SystemConfig.version=data;
+        AllApps.form(__apps, null);
+      });
+
+       
       
       
 
@@ -91,32 +103,65 @@ class _HomeState extends State<Home> {
   }
 
   getdata() async {
-    db = await AppDatabase.instance.database; 
-    store.record("SetUp").exists(db).then((bool isexit){
+   
+  
+   db_handler.store.record("SetUp").exists(db_handler.db).then((bool isexit){
+  
+           if(isexit){
+              setupdialog();
+          }else{
+           db_handler.store.record("wifi").get(db_handler.db).then((st){
+              SettingsConfig.wifi= st;
+            });
+           db_handler.store.record("hotSpot").get(db_handler.db).then((st){
+              SettingsConfig.hotspot= st;
+            });
+           db_handler.store.record("bluetooth").get(db_handler.db).then((st){
+              SettingsConfig.bluetooth= st;
+            });
+           db_handler.store.record("aeroplane").get(db_handler.db).then((st){
+              SettingsConfig.aeroplane_mode= st;
+            });
+           db_handler.store.record("mobile").get(db_handler.db).then((st){
+              SettingsConfig.mobile_data= st;
+            });
+           db_handler.store.record("sound").get(db_handler.db).then((st){
+              SettingsConfig.sound= st;
+            });
+           db_handler.store.record("camera").get(db_handler.db).then((st){
+              SettingsConfig.camera= st;
+            });
 
-      if(!isexit){
-         setupdialog();
-      }
+           db_handler.store.record("Apps").get(db_handler.db).then((apps){
+                SystemConfig.appNames=apps;
+                for(int i=0;i<AllApps.apps.length;i++){
+                  if(SystemConfig.appNames.contains(AllApps.apps[i].packageName)){
+                    SystemConfig.apps.add(AllApps.apps[i]);
+                  }
+
+                }
+             
+
+           }); 
+          }
+   
+     
 
     });
 
   }
 
-  // Image wallpaper = Image.network("");
+  Image wallpaper = Image.asset("lib/assets/close-up-drop-of-water-free-wallpaper-2604929.jpg");
   
   @override
   void initState() {
-
-   
-    getApps().then((_){
-          getdata();
-    });
-
-    
-
-   
-    
     super.initState();
+    getApps().then((_){
+         getdata();
+         
+    });
+    
+    
   }
 
   @override
@@ -131,15 +176,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
    SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.top]);
    
+   
     return Scaffold(
       
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(     
-          // image: DecorationImage(
-          //   image: wallpaper.image,
-          //   fit: BoxFit.fill
-          //   ) 
+          image: DecorationImage(
+            image: wallpaper.image,
+            fit: BoxFit.fill
+            ) 
         ),
 
         child: Padding(

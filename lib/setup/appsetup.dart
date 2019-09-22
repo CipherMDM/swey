@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:swey/systemconfig.dart';
@@ -122,11 +123,15 @@ class _CheckBoxState extends State<CheckBox> {
   @override
   void initState() {
     super.initState();
+   if(SystemConfig.appNames!=null){ 
     if(SystemConfig.appNames.contains(AllApps.apps[i].packageName)){
-
        color = Colors.red.withOpacity(0.8);
        added = true;
 
+      }
+    }else{
+      SystemConfig.appNames=[];
+      
     }
   }
 
@@ -146,6 +151,7 @@ class _CheckBoxState extends State<CheckBox> {
                                SystemConfig.apps = SystemConfig.apps.where((test)=>SystemConfig.appNames.contains(test.packageName)).toList();
                                added=false;
                          }
+                         db_handler.store.record("Apps").update(db_handler.db, SystemConfig.appNames);
                      });
       },
       child: CircleAvatar(

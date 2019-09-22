@@ -27,8 +27,7 @@ dependencies:
   sembast: ^2.0.1+2
   path_provider: ^1.3.0  
   permissions_kiosk: ^0.0.3
-  
-  # permission_handler: ^3.2.2
+  permission_handler: ^3.2.2
  
   
 dev_dependencies:
@@ -65,7 +64,7 @@ flutter:
    - lib/assets/iconfinder_chrome_browser_386456.png
    - lib/assets/iconfinder_browser_1646006.png
    - lib/assets/iconfinder_qrcode_1608801.png
-   - lib/assets/joel-fulgencio-6g9BxgCNQv4-unsplash.jpg
+   - lib/assets/close-up-drop-of-water-free-wallpaper-2604929.jpg
    
 
   # An image asset can refer to one or more resolution-specific "variants", see

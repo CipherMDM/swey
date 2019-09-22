@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
-// import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 class PermissionsPage extends StatefulWidget {
@@ -19,128 +19,128 @@ class _PermissionsState extends State<PermissionsPage> {
   Color write = Colors.transparent;
   Color perm = Colors.transparent;
   
-  // List<PermissionGroup> permissionNameList = [           PermissionGroup.calendar,
-  //                                                        PermissionGroup.camera,
-  //                                                        PermissionGroup.storage,
-  //                                                        PermissionGroup.contacts,
-  //                                                        PermissionGroup.ignoreBatteryOptimizations,
-  //                                                        PermissionGroup.locationWhenInUse,
-  //                                                        PermissionGroup.sensors,
-  //                                                        PermissionGroup.phone
-  //                                                        ];
+  List<PermissionGroup> permissionNameList = [           PermissionGroup.calendar,
+                                                         PermissionGroup.camera,
+                                                         PermissionGroup.storage,
+                                                         PermissionGroup.contacts,
+                                                         PermissionGroup.ignoreBatteryOptimizations,
+                                                         PermissionGroup.locationWhenInUse,
+                                                         PermissionGroup.sensors,
+                                                         PermissionGroup.phone
+                                                         ];
 
-  // initSettings()async{
+  initSettings()async{
 
-  //   await PermissionsKiosk.currentLauncher().then((islan){
-  //                                                 if(islan){
-  //                                              setState(() {
-  //                                                laun = Colors.green;
-  //                                              });
-  //                                          }else{
-  //                                               setState(() {
-  //                                                laun = Colors.transparent;
-  //                                              });
-  //                                          }
-  //                          });
-  //   await PermissionsKiosk.isUsageSettings().then((isus){
-  //                                            if(isus){
-  //                                              setState(() {
-  //                                                usage = Colors.green;
-  //                                              });
-  //                                          }else{
-  //                                               setState(() {
-  //                                                usage = Colors.transparent;
-  //                                              });
-  //                                          }
-  //                          });     
-  //   await PermissionsKiosk.isDrawSettings().then((isdr){
-  //                                                 if(isdr){
-  //                                              setState(() {
-  //                                                draw = Colors.green;
-  //                                              });
-  //                                          }else{
-  //                                               setState(() {
-  //                                                draw = Colors.transparent;
-  //                                              });
-  //                                          }
-  //                          });      
-  //   await PermissionsKiosk.isWriteSettings().then((iswr){
-  //                                                 if(iswr){
-  //                                              setState(() {
-  //                                                write = Colors.green;
-  //                                              });
-  //                                          }else{
-  //                                               setState(() {
-  //                                                write = Colors.transparent;
-  //                                              });
-  //                                          }
-  //                          }); 
+    await PermissionsKiosk.currentLauncher().then((islan){
+                                                  if(islan){
+                                               setState(() {
+                                                 laun = Colors.green;
+                                               });
+                                           }else{
+                                                setState(() {
+                                                 laun = Colors.transparent;
+                                               });
+                                           }
+                           });
+    await PermissionsKiosk.isUsageSettings().then((isus){
+                                             if(isus){
+                                               setState(() {
+                                                 usage = Colors.green;
+                                               });
+                                           }else{
+                                                setState(() {
+                                                 usage = Colors.transparent;
+                                               });
+                                           }
+                           });     
+    await PermissionsKiosk.isDrawSettings().then((isdr){
+                                                  if(isdr){
+                                               setState(() {
+                                                 draw = Colors.green;
+                                               });
+                                           }else{
+                                                setState(() {
+                                                 draw = Colors.transparent;
+                                               });
+                                           }
+                           });      
+    await PermissionsKiosk.isWriteSettings().then((iswr){
+                                                  if(iswr){
+                                               setState(() {
+                                                 write = Colors.green;
+                                               });
+                                           }else{
+                                                setState(() {
+                                                 write = Colors.transparent;
+                                               });
+                                           }
+                           }); 
 
 
-  //    for(int i=0;i<permissionNameList.length;i++){
-  //      if(permisson.permissions.isNotEmpty){
-  //        Future<List<PermissionStatus>> getval()async{
+     for(int i=0;i<permissionNameList.length;i++){
+       if(permisson.permissions.isNotEmpty){
+         Future<List<PermissionStatus>> getval()async{
            
-  //           return permisson.permissions.values.toList();
-  //        }
+            return permisson.permissions.values.toList();
+         }
 
-  //        getval().then((stat){
-  //          if(stat.contains(PermissionStatus.granted)){
-  //            if(stat.contains(PermissionStatus.denied) || stat.contains(PermissionStatus.disabled) || stat.contains(PermissionStatus.unknown) || stat.contains(PermissionStatus.restricted)){
+         getval().then((stat){
+           if(stat.contains(PermissionStatus.granted)){
+             if(stat.contains(PermissionStatus.denied) || stat.contains(PermissionStatus.disabled) || stat.contains(PermissionStatus.unknown) || stat.contains(PermissionStatus.restricted)){
                     
-  //                    setState(() {
-  //                       perm = Colors.orange;
-  //                    });
-  //            }else{
-  //               setState(() {
-  //                       perm = Colors.green;
-  //                    });
-  //            }
-  //          }
+                     setState(() {
+                        perm = Colors.orange;
+                     });
+             }else{
+                setState(() {
+                        perm = Colors.green;
+                     });
+             }
+           }
 
-  //        });
+         });
             
-  //      }
+       }
       
-  //    }                      
+     }                      
 
-  //   // Permission.getPermissionsStatus(permissionNameList).then((status){
-  //   //        var stat = [];
-  //   //        for(int i=0;i<status.length;i++){
-  //   //         stat.add(status[i].permissionStatus);  
-  //   //        }
-  //   //        if(stat.contains(PermissionStatus.allow)){
-  //   //          if(stat.contains(PermissionStatus.deny)){
+    // Permissions.getPermissionsStatus(permissionNameList).then((status){
+    //        var stat = [];
+    //        for(int i=0;i<status.length;i++){
+    //         stat.add(status[i].permissionStatus);  
+    //        }
+    //        if(stat.contains(PermissionStatus.allow)){
+    //          if(stat.contains(PermissionStatus.deny)){
                     
-  //   //                  setState(() {
-  //   //                     perm = Colors.orange;
-  //   //                  });
-  //   //          }else{
-  //   //             setState(() {
-  //   //                     perm = Colors.green;
-  //   //                  });
-  //   //          }
-  //   //        }
-  //   // });                                                                                             
+    //                  setState(() {
+    //                     perm = Colors.orange;
+    //                  });
+    //          }else{
+    //             setState(() {
+    //                     perm = Colors.green;
+    //                  });
+    //          }
+    //        }
+    // });                                                                                             
 
-  // }
+  }
 
   
-  // Timer t;
-  // @override
-  // void initState() {
-  //   initSettings();
-  //   super.initState();
-  //   t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted? initSettings():null);
+  Timer t;
+  @override
+  void initState() {
+    initSettings();
+    super.initState();
+    t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted? initSettings():null);
    
-  // }
+  }
 
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   t.cancel();
-  // }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    t.cancel();
+  }
 
 
 
@@ -295,7 +295,7 @@ class _PermissionsState extends State<PermissionsPage> {
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
                           onTap: ()async{
                             
-                          //  permisson.permissions =  await PermissionHandler().requestPermissions(permissionNameList);
+                           permisson.permissions =  await PermissionHandler().requestPermissions(permissionNameList);
                            setState(() {
                              
                            });                                        
@@ -344,7 +344,7 @@ class _PermissionsState extends State<PermissionsPage> {
   }
 }
 
-// class permisson{
-//   static Map<PermissionGroup, PermissionStatus> permissions={}; 
+class permisson{
+  static Map<PermissionGroup, PermissionStatus> permissions={}; 
   
-// }
+}

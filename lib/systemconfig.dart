@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class SystemConfig{
 
-  static List<Apps> apps;
-  static Map<String,String> settings;
-  static List<String> appNames;
+  static List<Apps> apps = [];
+  static Map<String,String> settings = {}; 
+  static List<String> appNames = [];
+  static String version;
 
   SystemConfig.form(List<Apps> apps,List<String> appName,Map<String,String> settings){
            SystemConfig.apps=apps;
