@@ -116,6 +116,12 @@ public class MainActivity extends FlutterActivity{
             
             }  
 
+            else if (call.method.equals("GetPermissions")) {
+
+              
+            
+            }  
+
 
         }  
     });

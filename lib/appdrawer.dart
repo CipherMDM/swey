@@ -23,7 +23,7 @@ class _AppDrawerState extends State<AppDrawer> {
       appBar: AppBar(
         elevation: 0,
        backgroundColor: Colors.transparent,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.black,),onPressed: ()=>Navigator.of(context).pop(),),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.black,size: 20,),onPressed: ()=>Navigator.of(context).pop(),),
         actions: <Widget>[IconButton(icon: Icon(Icons.settings,color: Colors.black,),onPressed: (){
           var route = CupertinoPageRoute(builder: (context)=>Settings());
           Navigator.push(context, route);

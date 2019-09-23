@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
-import 'package:device_apps/device_apps.dart';
 import 'package:swey/systemconfig.dart';
 
 
