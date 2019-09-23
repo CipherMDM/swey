@@ -52,7 +52,7 @@ public class MainActivity extends FlutterActivity{
   private static  FlutterView flutterView;
   boolean currentFocus;
   Context context=this;
-  boolean isPaused;
+  boolean isPaused;  
   Handler collapseNotificationHandler;
   Handler collapsePowerButtonHandler;
 
@@ -105,6 +105,18 @@ public class MainActivity extends FlutterActivity{
             else if (call.method.equals("OpenAero")) {
               startActivity(new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS));
             }   
+
+            //kiosk set up
+
+            else if (call.method.equals("Activate")) {
+
+              //  apps.allowed_Apps = call.argument("apps");
+               System.out.println("Called me");
+               System.out.println(apps.allowed_Apps);
+            
+            }  
+
+
         }  
     });
 

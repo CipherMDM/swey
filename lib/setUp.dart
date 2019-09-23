@@ -67,7 +67,7 @@ class _SetUpState extends State<SetUp> {
              Expanded(
             child: ListView(
               
-            children: _controller.text.isEmpty?[
+            children:[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
@@ -75,7 +75,7 @@ class _SetUpState extends State<SetUp> {
                     borderRadius: BorderRadius.circular(20),
                     child: Column(
                       children: <Widget>[
-                        ListTile(
+                        (_controller.text.isEmpty || "wifi".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.wifi,color: Colors.orange,),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,8 +155,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                           ListTile(
+                          ):Center(),
+                          (_controller.text.isEmpty || "hotspot".startsWith(_controller.text.toLowerCase()))? ListTile(
                           leading: Icon(Icons.wifi_tethering,color: Colors.blueGrey,),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -232,8 +232,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                         ListTile(
+                          ):Center(),
+                         (_controller.text.isEmpty || "bluetooth".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.bluetooth,color: Colors.blueAccent),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -309,8 +309,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                         ListTile(
+                          ):Center(),
+                         (_controller.text.isEmpty || "aeroplane mode".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.airplanemode_active,color: Colors.lightBlueAccent),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -386,8 +386,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                          ListTile(
+                          ):Center(),
+                          (_controller.text.isEmpty || "mobile data".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.data_usage,color: Colors.green),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -463,8 +463,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                          ListTile(
+                          ):Center(),
+                         (_controller.text.isEmpty || "sound".startsWith(_controller.text.toLowerCase()))? ListTile(
                           leading: Icon(Icons.music_note,color: Colors.indigoAccent),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -523,8 +523,8 @@ class _SetUpState extends State<SetUp> {
                               )
                             );
                           },
-                          ),
-                          ListTile(
+                          ):Center(),
+                          (_controller.text.isEmpty || "camera".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.camera_alt,color: Colors.pinkAccent),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -586,7 +586,7 @@ class _SetUpState extends State<SetUp> {
                             );
                           },
 
-                          ),
+                          ):Center(),
                             
                       ],
                     ),
@@ -599,7 +599,7 @@ class _SetUpState extends State<SetUp> {
                     borderRadius: BorderRadius.circular(20),
                     child: Column(
                       children: <Widget>[
-                        ListTile(
+                       (_controller.text.isEmpty || "allow apps".startsWith(_controller.text.toLowerCase()))? ListTile(
                           leading: Icon(Icons.apps,color: Colors.deepPurple,),
                           title: Text("Allow Apps",style: TextStyle(fontWeight: FontWeight.bold),),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -607,8 +607,8 @@ class _SetUpState extends State<SetUp> {
                             var route = MaterialPageRoute(builder: (context)=>AppSetUp());
                             Navigator.push(context, route);
                           },
-                          ),
-                          double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])>=6? ListTile(
+                          ):Center(),
+                          double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])>=6?(_controller.text.isEmpty || "permissions".startsWith(_controller.text.toLowerCase()))? ListTile(
                           leading: Icon(Icons.bookmark,color: Colors.blueAccent),
                           title: Text("Permissions",style: TextStyle(fontWeight: FontWeight.bold),),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -616,8 +616,8 @@ class _SetUpState extends State<SetUp> {
                             var route = CupertinoPageRoute(builder: (context)=>PermissionsPage());
                             Navigator.push(context, route);
                           },
-                          ):
-                          ListTile(
+                          ):Center():
+                          (_controller.text.isEmpty || "enable usage access".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.access_time,color: Colors.lightBlueAccent),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -632,12 +632,12 @@ class _SetUpState extends State<SetUp> {
                                    PermissionsKiosk.getUsageSettings();  
                            
                           },
-                          ),
-                         ListTile(
+                          ):Center(),
+                         (_controller.text.isEmpty || "kiosk password".startsWith(_controller.text.toLowerCase()))?ListTile(
                           leading: Icon(Icons.lock,color: Colors.red),
                           title: Text("Kiosk Password",style: TextStyle(fontWeight: FontWeight.bold),),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                          ),
+                          ):Center(),
                           
                             
                       ],
@@ -646,9 +646,7 @@ class _SetUpState extends State<SetUp> {
                 )
                 
        
-            ]:[
-
-            ],
+            ]
             ),
           )
          

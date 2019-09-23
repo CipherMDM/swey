@@ -22,6 +22,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  static const methodChannel = const MethodChannel("com.Cipher");
+
  
   setupdialog(){
       showDialog(
@@ -31,7 +33,6 @@ class _HomeState extends State<Home> {
                title: Text("Quick Start"),
                children: <Widget>[
                  
-                  
                      ListTile(
                        title: Text("Import from Cloud"),
                        leading: Icon(Icons.cloud,color: Colors.black,),
@@ -104,12 +105,13 @@ class _HomeState extends State<Home> {
 
   getdata() async {
    
-  
+   
    db_handler.store.record("SetUp").exists(db_handler.db).then((bool isexit){
   
            if(isexit){
               setupdialog();
           }else{
+            
            db_handler.store.record("wifi").get(db_handler.db).then((st){
               SettingsConfig.wifi= st;
             });
@@ -142,6 +144,9 @@ class _HomeState extends State<Home> {
                 }
              
 
+           }).then((_)async{
+             print("object");
+             await methodChannel.invokeMethod("Activate",{"apps",SystemConfig.appNames});
            }); 
           }
    
@@ -179,97 +184,91 @@ class _HomeState extends State<Home> {
    
     return Scaffold(
       
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(     
-          image: DecorationImage(
-            image: wallpaper.image,
-            fit: BoxFit.fill
-            ) 
-        ),
+      body: GestureDetector(
+        onVerticalDragUpdate: (_){
+          var route = MaterialPageRoute(builder: (context)=>AppDrawer());
+          Navigator.push(context, route);
+        },
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(     
+            image: DecorationImage(
+              image: wallpaper.image,
+              fit: BoxFit.fill
+              ) 
+          ),
 
-        child: Padding(
-                   padding: const EdgeInsets.only(top:18.0,bottom: 18,left: 12,right: 12),
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.end,
-                     children: <Widget>[
+          child: Padding(
+                     padding: const EdgeInsets.only(top:18.0,bottom: 10,left: 10,right: 10),
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.end,
+                       children: <Widget>[
 
-                       Expanded(
-                         child: Padding(
-                           padding: const EdgeInsets.only(top:18.0,bottom: 18),
-                         
+                         Expanded(
+                           child: Padding(
+                             padding: const EdgeInsets.only(top:18.0,bottom: 18),
+                           
+                           ),
                          ),
-                       ),
-                       
-                        Material(
-                          
-                          elevation:1,
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                            height: 90,
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Container(
-                                  height: 90,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0.8),
-                                    icon: Image.asset("lib/assets/iconfinder_phone_1645999.png",height: 45),
-                                    onPressed: (){},
-                                    )
-                                 ),
-                                Container(
-                                  height: 90,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0.8),
-                                    icon: Image.asset("lib/assets/iconfinder_1041_boy_c_2400506.png"),
-                                    onPressed: (){},)
-                                 ),
-                                Container(
-                                  height: 90,
-                                  child: IconButton(
-                          
-                                    padding: EdgeInsets.all(0.8),
-                                    icon: Icon(
-                                      Icons.apps,
-                                      color: Colors.white,
-                                      size: 40,
-                                      ),
-                                      
-                                    onPressed: (){
-                                      var route =  MaterialPageRoute(builder: (context)=>AppDrawer());
-                                      Navigator.of(context).push(route);
-                                    },)
-                                ),
-                                 Container(
-                                  height: 90,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0.8),
-                                    icon: Image.asset("lib/assets/iconfinder_Email_2062072.png",height: 45),
-                                    onPressed: (){},)
-                                 ),
+                         Icon(Icons.keyboard_arrow_up,color: Colors.white,),
+                         
+                          Container(
+                              height: 90,
+                              width: MediaQuery.of(context).size.width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
                                   Container(
-                                  height: 90,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(1.9),
-                                    icon: Image.asset("lib/assets/iconfinder_browser_1646006.png",height: 100,),
-                                    onPressed: (){},)
-                                 ),
-                                   
-                              ],
-                              
-                              
-                            )
-                          ),
-                        )
-                     ],
-                   ),
-                
-           ),
-      
+                                    height: 90,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(0.8),
+                                      icon: Image.asset("lib/assets/iconfinder_phone_1645999.png",height: 45),
+                                      onPressed: (){},
+                                      )
+                                   ),
+                                  Container(
+                                    height: 90,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(0.8),
+                                      icon: Image.asset("lib/assets/iconfinder_1041_boy_c_2400506.png"),
+                                      onPressed: (){},)
+                                   ),
+                                    Container(
+                                    height: 90,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(1.9),
+                                      icon: Image.asset("lib/assets/iconfinder_browser_1646006.png",height: 100,),
+                                      onPressed: (){},)
+                                   ),
+                                
+                                   Container(
+                                    height: 90,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(0.8),
+                                      icon: Image.asset("lib/assets/iconfinder_Email_2062072.png",height: 45),
+                                      onPressed: (){},)
+                                   ),
+                                    Container(
+                                    height: 90,
+                                    child: IconButton(
+                                      padding: EdgeInsets.all(1.9),
+                                      icon: Image.asset("lib/assets/iconfinder_browser_1646006.png",height: 100,),
+                                      onPressed: (){},)
+                                   ),
+                                     
+                                ],
+                                
+                                
+                              )
+                            ),
+                          
+                       ],
+                     ),
+                  
+             ),
         
+          
+        ),
       ),
 
     );

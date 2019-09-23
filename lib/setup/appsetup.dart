@@ -13,6 +13,8 @@ class AppSetUp extends StatefulWidget {
 
 class _AppSetUpState extends State<AppSetUp> {
 
+  List<Apps> temp=AllApps.apps;
+
   TextEditingController _controller = new TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class _AppSetUpState extends State<AppSetUp> {
       appBar: AppBar(
         elevation: 0,
        backgroundColor: Colors.transparent,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.black,),onPressed: ()=>Navigator.of(context).pop(),),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.black,size: 20,),onPressed: ()=>Navigator.of(context).pop(),),
       
       ),
       body: Column(children: <Widget>[
@@ -53,7 +55,7 @@ class _AppSetUpState extends State<AppSetUp> {
                                 child:Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    CheckBox(i),
+                                    CheckBox(AllApps.apps[i]),
                                     Center(child: Text(AllApps.apps[i].appNmae.toString().split(" ")[0].split("_")[0]))
                                     
                                   ],
@@ -61,20 +63,12 @@ class _AppSetUpState extends State<AppSetUp> {
                               ),
                             )
                             
-                            
-                            //  ListTile(
-                            //    onTap:()=> DeviceApps.openApp(apps[i].packageName),
-                            //    leading: Image.memory(apps[i].icon) ,
-                            //    title:Text(apps[i].appName) ,
-                            // ),
+                           
                           ),
                           
                         );
                          }),
-                 ):
-            Container(
-
-            ),
+                 ): Center()
             ),
              Padding(
                 padding: const EdgeInsets.only(top:18.0,left: 10,right: 10),
@@ -84,6 +78,7 @@ class _AppSetUpState extends State<AppSetUp> {
                   controller: _controller,
                   onChanged: (text){
                         setState(() {
+                          temp = AllApps.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList();
                           
                         });
                   },
@@ -107,7 +102,7 @@ class _AppSetUpState extends State<AppSetUp> {
 
 
 class CheckBox extends StatefulWidget {
-  int i;
+  Apps i;
   CheckBox(this.i);
   @override
   _CheckBoxState createState() => _CheckBoxState(i);
@@ -116,7 +111,7 @@ class CheckBox extends StatefulWidget {
 class _CheckBoxState extends State<CheckBox> {
   Color color = Colors.grey.withOpacity(0.4);
   bool added = false;
-  int i;
+  Apps i;
   _CheckBoxState(this.i);
 
 
@@ -124,7 +119,7 @@ class _CheckBoxState extends State<CheckBox> {
   void initState() {
     super.initState();
    if(SystemConfig.appNames!=null){ 
-    if(SystemConfig.appNames.contains(AllApps.apps[i].packageName)){
+    if(SystemConfig.appNames.contains(i.packageName)){
        color = Colors.red.withOpacity(0.8);
        added = true;
 
@@ -143,11 +138,11 @@ class _CheckBoxState extends State<CheckBox> {
                          if(!added){
                               color = Colors.red.withOpacity(0.8);
                               added=true;
-                              SystemConfig.appNames.add(AllApps.apps[i].packageName);
-                              SystemConfig.apps.add(AllApps.apps[i]);
+                              SystemConfig.appNames.add(i.packageName);
+                              SystemConfig.apps.add(i);
                          }else{
                                color = Colors.grey.withOpacity(0.4);
-                               SystemConfig.appNames.remove(AllApps.apps[i].packageName);
+                               SystemConfig.appNames.remove(i.packageName);
                                SystemConfig.apps = SystemConfig.apps.where((test)=>SystemConfig.appNames.contains(test.packageName)).toList();
                                added=false;
                          }
@@ -157,7 +152,7 @@ class _CheckBoxState extends State<CheckBox> {
       child: CircleAvatar(
           
           backgroundColor: Colors.transparent,
-          backgroundImage: AllApps.apps[i].appIcon.image,
+          backgroundImage: i.appIcon.image,
           radius: 28,
           child: Padding(
                      padding: EdgeInsets.only(top:35,left: 35),
