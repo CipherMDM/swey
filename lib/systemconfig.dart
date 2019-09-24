@@ -6,6 +6,8 @@ class SystemConfig{
   static Map<String,String> settings = {}; 
   static List<String> appNames = [];
   static String version;
+  static bool appdraw = false;
+  static List<String> allsettings = [];
 
   SystemConfig.form(List<Apps> apps,List<String> appName,Map<String,String> settings){
            SystemConfig.apps=apps;

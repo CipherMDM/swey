@@ -110,7 +110,7 @@ public class MainActivity extends FlutterActivity{
 
             else if (call.method.equals("Activate")) {
 
-              //  apps.allowed_Apps = call.argument("apps");
+               apps.allowed_Apps = call.argument("apps");
                System.out.println("Called me");
                System.out.println(apps.allowed_Apps);
             

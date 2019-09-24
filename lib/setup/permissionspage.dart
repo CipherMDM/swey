@@ -221,8 +221,16 @@ class _PermissionsState extends State<PermissionsPage> {
                                          
                                           Scaffold.of(context).showSnackBar(
                                             SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getUsageSettings();  
+                                              },),
                                               content:Row(
+                                             
                                               children: <Widget>[
+                                                 Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
                                                 Text("Enable Usage Access",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
                                                 
                                               ],),
@@ -233,8 +241,15 @@ class _PermissionsState extends State<PermissionsPage> {
                                          
                                           Scaffold.of(context).showSnackBar(
                                             SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getDrawSettings();  
+                                              },),
                                               content:Row(
                                               children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
                                                 Text("Enable Overlay Permissions",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
                                                 
                                               ],),
@@ -245,8 +260,15 @@ class _PermissionsState extends State<PermissionsPage> {
                                          
                                           Scaffold.of(context).showSnackBar(
                                             SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getWriteSettings();  
+                                              },),
                                               content:Row(
                                               children: <Widget>[
+                                                 Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
                                                 Text("Enable Write Settings",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
                                                 
                                               ],),

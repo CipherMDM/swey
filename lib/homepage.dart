@@ -5,9 +5,9 @@ import 'package:permissions_kiosk/permissions_kiosk.dart';
 import 'package:sembast/sembast.dart';
 import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
+import 'package:swey/settings.dart';
 import 'package:swey/settingsconfig.dart';
 import 'package:swey/systemconfig.dart';
-import 'appdrawer.dart';
 import 'DataBase/AppDatabase.dart';
 import 'setUp.dart';
 import 'package:device_apps/device_apps.dart';
@@ -133,6 +133,10 @@ class _HomeState extends State<Home> {
            db_handler.store.record("camera").get(db_handler.db).then((st){
               SettingsConfig.camera= st;
             });
+           db_handler.store.record("appdraw").get(db_handler.db).then((st){
+              SystemConfig.appdraw= st;
+              print(SystemConfig.appdraw);
+            }); 
 
            db_handler.store.record("Apps").get(db_handler.db).then((apps){
                 SystemConfig.appNames=apps;
@@ -145,7 +149,7 @@ class _HomeState extends State<Home> {
              
 
            }).then((_)async{
-             print("object");
+            
              await methodChannel.invokeMethod("Activate",{"apps",SystemConfig.appNames});
            }); 
           }
@@ -160,11 +164,13 @@ class _HomeState extends State<Home> {
   
   @override
   void initState() {
-    super.initState();
+    
     getApps().then((_){
          getdata();
          
     });
+    super.initState();
+    
     
     
   }
@@ -183,97 +189,106 @@ class _HomeState extends State<Home> {
    
    
     return Scaffold(
-      
-      body: GestureDetector(
-        onVerticalDragUpdate: (_){
-          var route = MaterialPageRoute(builder: (context)=>AppDrawer());
-          Navigator.push(context, route);
-        },
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(     
-            image: DecorationImage(
-              image: wallpaper.image,
-              fit: BoxFit.fill
-              ) 
-          ),
+        body: Builder(
+          builder:(context)=> GestureDetector(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(     
+              image: DecorationImage(
+                image: wallpaper.image,
+                fit: BoxFit.fill
+                ) 
+            ),
 
-          child: Padding(
-                     padding: const EdgeInsets.only(top:18.0,bottom: 10,left: 10,right: 10),
-                     child: Column(
-                       mainAxisAlignment: MainAxisAlignment.end,
-                       children: <Widget>[
+            child: GestureDetector(
+              onTap: (){
+                setState(() {
+                  
+                });
+              },
+              child: Padding(
+                         padding: const EdgeInsets.only(top:18.0,bottom: 10,),
+                         child: Column(
+                           mainAxisAlignment: MainAxisAlignment.end,
+                           children: <Widget>[
 
-                         Expanded(
-                           child: Padding(
-                             padding: const EdgeInsets.only(top:18.0,bottom: 18),
+                             Expanded(
+                               child: Padding(
+                                 padding: const EdgeInsets.only(top:0,bottom: 10),
+                                 child: ListView(
+                              
+                                //  crossAxisCount: 4,
+                             
+                              children: List.generate(SystemConfig.apps.length, (i) {
+                                return Container(
+                                height: 100,
+                                child: ListTile(
+                                  onTap: (){
+                                     DeviceApps.openApp(SystemConfig.apps[i].packageName);
+                                  },
+                                  title: Text( SystemConfig.apps[i].appNmae,style: TextStyle(color: Colors.white.withOpacity(0.9)),),
+                                  leading:(SystemConfig.apps[i].appIcon) ,
+                                ),
+                                
+                              );
+                               }),
+                           )
+
+                               
+                               ),
+                             ),
                            
-                           ),
+                     Padding(
+                      padding: const EdgeInsets.only(top:8.0,left: 10,right: 10),
+                      child:Container(
+                          height: 40,
+                       child: ListTile(
+                         trailing: IconButton(icon: Icon(Icons.settings,color: Colors.white.withOpacity(0.8)),
+                          onPressed: (){
+                              var route = CupertinoPageRoute(builder: (context)=>Settings());
+                              Navigator.push(context, route);
+                          },
                          ),
-                         Icon(Icons.keyboard_arrow_up,color: Colors.white,),
-                         
-                          Container(
-                              height: 90,
-                              width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Container(
-                                    height: 90,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0.8),
-                                      icon: Image.asset("lib/assets/iconfinder_phone_1645999.png",height: 45),
-                                      onPressed: (){},
-                                      )
-                                   ),
-                                  Container(
-                                    height: 90,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0.8),
-                                      icon: Image.asset("lib/assets/iconfinder_1041_boy_c_2400506.png"),
-                                      onPressed: (){},)
-                                   ),
-                                    Container(
-                                    height: 90,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(1.9),
-                                      icon: Image.asset("lib/assets/iconfinder_browser_1646006.png",height: 100,),
-                                      onPressed: (){},)
-                                   ),
-                                
-                                   Container(
-                                    height: 90,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(0.8),
-                                      icon: Image.asset("lib/assets/iconfinder_Email_2062072.png",height: 45),
-                                      onPressed: (){},)
-                                   ),
-                                    Container(
-                                    height: 90,
-                                    child: IconButton(
-                                      padding: EdgeInsets.all(1.9),
-                                      icon: Image.asset("lib/assets/iconfinder_browser_1646006.png",height: 100,),
-                                      onPressed: (){},)
-                                   ),
-                                     
-                                ],
-                                
-                                
+                         title: Container(
+                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Colors.white),
+                           child: TextField(
+                            
+                            onChanged: (text){
+                                  setState(() {
+                                    
+                                    
+                                  });
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(top:16,bottom: 8,right: 10,left: 14),
+                              prefixIcon: Icon(Icons.search),
+                              hintText: "Search",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40)
                               )
                             ),
-                          
-                       ],
-                     ),
-                  
-             ),
-        
+                      ),
+                         ),
+                       ),
+                    ),
+                ),
+                Padding(padding: EdgeInsets.all(10),)
+                              
+                           ],
+                         ),
+                      
+                 ),
+            ),
           
-        ),
+            
+          ),
       ),
+        ),
 
     );
   }
 }
+
 
 
 
