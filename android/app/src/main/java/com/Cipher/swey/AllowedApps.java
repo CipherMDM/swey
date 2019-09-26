@@ -1,6 +1,6 @@
 package com.Cipher.swey;
 import java.util.*;
 
-class apps{
-   static  List<String> allowed_Apps;
+public class AllowedApps{
+   public static  List<String> Apps = new ArrayList<>();
 }

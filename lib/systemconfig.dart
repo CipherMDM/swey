@@ -22,5 +22,6 @@ class Apps{
    String appNmae;
    String packageName;
    Image appIcon;
+  
    Apps({this.appIcon,this.packageName,this.appNmae});
 }

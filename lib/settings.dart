@@ -69,7 +69,7 @@ class _SettingsState extends State<Settings> {
                        children: <Widget>[
 
 
-                         (SettingsConfig.wifi=="user" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "wifi".startsWith(_controller.text.toLowerCase()))?
+                         (SettingsConfig.wifi=="user" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty && SettingsConfig.wifi=="user" && "wifi".startsWith(_controller.text.toLowerCase()))?
                           ListTile(
                           leading: Icon(Icons.wifi,color: Colors.orange,),
                            onTap: ()async{
@@ -85,7 +85,7 @@ class _SettingsState extends State<Settings> {
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
 
-                         (SettingsConfig.hotspot=="user" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "hotspot".startsWith(_controller.text.toLowerCase()))?
+                         ((SettingsConfig.hotspot=="user" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty && SettingsConfig.hotspot=="user" && "hotspot".startsWith(_controller.text.toLowerCase())))?
                           ListTile(
                           leading: Icon(Icons.wifi_tethering,color: Colors.blueGrey,),
                            onTap: ()async{
@@ -100,7 +100,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
-                          (SettingsConfig.bluetooth=="user" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "bluetooth".startsWith(_controller.text.toLowerCase())) ?
+                          (SettingsConfig.bluetooth=="user" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty &&  SettingsConfig.bluetooth=="user" && "bluetooth".startsWith(_controller.text.toLowerCase())) ?
                           ListTile(
                           leading: Icon(Icons.bluetooth,color: Colors.blueAccent),
                            onTap: ()async{
@@ -115,7 +115,7 @@ class _SettingsState extends State<Settings> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
-                          (SettingsConfig.aeroplane_mode=="user" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "aeroplane mode".startsWith(_controller.text.toLowerCase())) ?
+                          (SettingsConfig.aeroplane_mode=="user" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty &&  SettingsConfig.aeroplane_mode=="user" && "aeroplane mode".startsWith(_controller.text.toLowerCase())) ?
                            ListTile(
                           leading: Icon(Icons.airplanemode_active,color: Colors.lightBlueAccent),
                            onTap: ()async{
@@ -132,7 +132,7 @@ class _SettingsState extends State<Settings> {
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
 
-                          (SettingsConfig.mobile_data=="user" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "mobile data".startsWith(_controller.text.toLowerCase()))?
+                          (SettingsConfig.mobile_data=="user" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty &&  SettingsConfig.mobile_data=="user" && "mobile data".startsWith(_controller.text.toLowerCase()))?
                           ListTile(
                           leading: Icon(Icons.data_usage,color: Colors.green),
                             onTap: ()async{
@@ -147,7 +147,23 @@ class _SettingsState extends State<Settings> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
-                          (SettingsConfig.sound=="Allow" && _controller.text.isEmpty) || (SettingsConfig.sound=="Allow" && "sound".startsWith(_controller.text.toLowerCase()))?
+
+                          (SettingsConfig.display=="Allow" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty && SettingsConfig.display=="Allow" && "display".startsWith(_controller.text.toLowerCase()))?
+                           ListTile(
+                          leading: Icon(Icons.tv,color: Colors.orangeAccent),
+                           onTap: ()async{
+                             await methodChannel.invokeMethod("OpenDisplay");
+                           },
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("Display",style: TextStyle(fontWeight: FontWeight.bold),),
+                              
+                            ],
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
+
+                          (SettingsConfig.sound=="Allow" && _controller.text.isEmpty) || ( _controller.text.isNotEmpty && SettingsConfig.sound=="Allow" && "sound".startsWith(_controller.text.toLowerCase()))?
                            ListTile(
                           leading: Icon(Icons.music_note,color: Colors.indigoAccent),
                            onTap: ()async{
@@ -162,16 +178,10 @@ class _SettingsState extends State<Settings> {
                           ),
                           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),):Center(),
 
+
+
                            
-                       (_controller.text.isEmpty || "kiosk settings".startsWith(_controller.text.toLowerCase()))? ListTile(
-                          leading: Icon(Icons.warning,color: Colors.red,),
-                          title: Text("Kiosk Settings",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
-                          trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                          onTap: (){
-                               var route = CupertinoPageRoute(builder: (context)=>SetUp());
-                               Navigator.push(context, route);
-                          },
-                          ):Center(),
+                      
                          
  
 
@@ -180,6 +190,26 @@ class _SettingsState extends State<Settings> {
                     )
                   ),
                 ),
+
+                 Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Material(
+                      
+                      borderRadius: BorderRadius.circular(20),
+                      child: Column(
+                        children: <Widget>[
+
+                           (_controller.text.isEmpty || "kiosk settings".startsWith(_controller.text.toLowerCase()))? ListTile(
+                          leading: Icon(Icons.warning,color: Colors.red,),
+                          title: Text("Kiosk Settings",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),),
+                          trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                          onTap: (){
+                               var route = CupertinoPageRoute(builder: (context)=>SetUp());
+                               Navigator.push(context, route);
+                          },
+                          ):Center(),
+
+                        ])))
                
                 
        

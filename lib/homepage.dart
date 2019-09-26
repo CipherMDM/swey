@@ -23,6 +23,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   static const methodChannel = const MethodChannel("com.Cipher");
+  TextEditingController _controller = TextEditingController();
+  bool loaded = false;
 
  
   setupdialog(){
@@ -133,10 +135,10 @@ class _HomeState extends State<Home> {
            db_handler.store.record("camera").get(db_handler.db).then((st){
               SettingsConfig.camera= st;
             });
-           db_handler.store.record("appdraw").get(db_handler.db).then((st){
-              SystemConfig.appdraw= st;
-              print(SystemConfig.appdraw);
+           db_handler.store.record("Display").get(db_handler.db).then((st){
+              SettingsConfig.display= st;
             }); 
+           
 
            db_handler.store.record("Apps").get(db_handler.db).then((apps){
                 SystemConfig.appNames=apps;
@@ -148,10 +150,7 @@ class _HomeState extends State<Home> {
                 }
              
 
-           }).then((_)async{
-            
-             await methodChannel.invokeMethod("Activate",{"apps",SystemConfig.appNames});
-           }); 
+           });
           }
    
      
@@ -164,12 +163,30 @@ class _HomeState extends State<Home> {
   
   @override
   void initState() {
-    
+    super.initState();
+    Timer(Duration(seconds: 7),(){setState(() {
+        methodChannel.invokeMethod("Deactivate");
+        PermissionsKiosk.currentLauncher().then((_){
+              loaded=true;
+               methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames});
+              if(_){
+               
+                    methodChannel.invokeMethod("Activate");
+               
+                
+              }
+              setState(() {
+                
+              });
+        });
+         
+
+    });});
     getApps().then((_){
          getdata();
          
     });
-    super.initState();
+   
     
     
     
@@ -189,7 +206,8 @@ class _HomeState extends State<Home> {
    
    
     return Scaffold(
-        body: Builder(
+        backgroundColor: Colors.black,
+        body: !loaded?Center(child: CircularProgressIndicator(),): Builder(
           builder:(context)=> GestureDetector(
           child: Container(
             height: MediaQuery.of(context).size.height,
@@ -215,23 +233,65 @@ class _HomeState extends State<Home> {
                              Expanded(
                                child: Padding(
                                  padding: const EdgeInsets.only(top:0,bottom: 10),
-                                 child: ListView(
+                                 child: GridView.count(
                               
-                                //  crossAxisCount: 4,
+                               crossAxisCount: 4,
                              
-                              children: List.generate(SystemConfig.apps.length, (i) {
+                              children: _controller.text.isEmpty? List.generate(SystemConfig.apps.length, (i) {
                                 return Container(
                                 height: 100,
-                                child: ListTile(
-                                  onTap: (){
-                                     DeviceApps.openApp(SystemConfig.apps[i].packageName);
-                                  },
-                                  title: Text( SystemConfig.apps[i].appNmae,style: TextStyle(color: Colors.white.withOpacity(0.9)),),
-                                  leading:(SystemConfig.apps[i].appIcon) ,
+                                child: GestureDetector(
+                                onTap: (){DeviceApps.openApp(SystemConfig.apps[i].packageName);},
+                                child: Center(
+                                  child:Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        height: 55,
+                                        child: SystemConfig.apps[i].appIcon,
+                                      ),
+                                      Center(child: Text(SystemConfig.apps[i].appNmae.toString().length>8?SystemConfig.apps[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
+                                      ,style:TextStyle(
+                                        color: Colors.white.withOpacity(0.8),
+                                        fontSize: 12
+                                      )
+                                      )
+                                      )
+                                      
+                                    ],
+                                  ) 
                                 ),
+                              )
                                 
                               );
-                               }),
+                               }):List.generate(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList().length, (i) {
+                                return Container(
+                                height: 100,
+                                child: GestureDetector(
+                                onTap: (){DeviceApps.openApp(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].packageName);},
+                                child: Center(
+                                  child:Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Container(
+                                        height: 55,
+                                        child: SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appIcon,
+                                      ),
+                                      Center(child: Text(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().length>8?SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
+                                      ,style:TextStyle(
+                                        color: Colors.white.withOpacity(0.8),
+                                        fontSize: 12
+                                      )
+                                      )
+                                      )
+                                      
+                                    ],
+                                  ) 
+                                ),
+                              )
+                                
+                              );
+                               })
                            )
 
                                
@@ -252,7 +312,7 @@ class _HomeState extends State<Home> {
                          title: Container(
                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Colors.white),
                            child: TextField(
-                            
+                            controller: _controller,
                             onChanged: (text){
                                   setState(() {
                                     

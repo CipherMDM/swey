@@ -8,5 +8,6 @@ class SettingsConfig{
   static String mobile_data="";
   static String sound="";
   static String camera="";
+  static String display="";
 
 }

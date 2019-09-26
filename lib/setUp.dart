@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
 import 'package:swey/settingsconfig.dart';
 import 'package:swey/setup/appsetup.dart';
@@ -31,7 +32,7 @@ class _SetUpState extends State<SetUp> {
   
   
   
-  
+  static const methodChannel = const MethodChannel("com.Cipher");
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +45,10 @@ class _SetUpState extends State<SetUp> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.highlight_off,color: Colors.red,),onPressed: (){
-            exit(0);
+             methodChannel.invokeMethod("Deactivate").then((_){
+                methodChannel.invokeMethod("OpenSettings");
+             });
+             
           },)
         ],
         title: Center(child: Text("Admin Setup",style: TextStyle(color: Colors.black),),),
@@ -122,6 +126,7 @@ class _SetUpState extends State<SetUp> {
                                                 store.record("wifi").add(db_handler.db, "on");
                                              }
                                              
+                                             
                                            });
                                           
                                           
@@ -142,6 +147,7 @@ class _SetUpState extends State<SetUp> {
                                                 store.record("wifi").add(db_handler.db, "off");
                                              }
                                              
+                                             
                                            });
                                          });
                                           Navigator.of(context).pop();
@@ -159,6 +165,7 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("wifi").add(db_handler.db, "user");
                                              }
+                                           
                                              
                                            });
                                          });
@@ -278,6 +285,7 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("bluetooth").add(db_handler.db, "on");
                                              }
+                                                                                         
                                              
                                            });
                                          });
@@ -296,7 +304,7 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("bluetooth").add(db_handler.db, "off");
                                              }
-                                             
+                                                                                          
                                            });
                                          });
                                           Navigator.of(context).pop();
@@ -313,7 +321,6 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("bluetooth").add(db_handler.db, "user");
                                              }
-                                             
                                            });
                                          });
                                           Navigator.of(context).pop();
@@ -467,7 +474,6 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("mobile").add(db_handler.db, "user");
                                              }
-                                             
                                            });
                                          });
                                           Navigator.of(context).pop();
@@ -509,7 +515,6 @@ class _SetUpState extends State<SetUp> {
                                              }else{
                                                 store.record("sound").add(db_handler.db, "Deny");
                                              }
-                                             
                                            });
                                          });
                                           Navigator.of(context).pop();
@@ -528,11 +533,75 @@ class _SetUpState extends State<SetUp> {
                                                 store.record("sound").add(db_handler.db, "Aloow");
                                              }
                                              
+                                             
                                            });
                                          });
                                           Navigator.of(context).pop();
                                          }
                                      ),
+
+                                  ],
+
+                                )
+                              );
+                            },
+                            ):Center(),
+
+                            (_controller.text.isEmpty || "display".startsWith(_controller.text.toLowerCase()))? ListTile(
+                            leading: Icon(Icons.tv,color: Colors.orangeAccent),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("Display",style: TextStyle(fontWeight: FontWeight.bold),),
+                                 Text(SettingsConfig.display!=null?SettingsConfig.display:"",style: TextStyle(fontSize: 13),),
+                              ],
+                            ),
+                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            onTap: (){
+                              showDialog(
+                                context: context,
+                                builder: (context)=>CupertinoAlertDialog(
+
+                                  title: Text("Display"),
+                                  
+                                 
+                                  actions: <Widget>[
+                                     CupertinoDialogAction(
+                                       child: Text("Deny"),
+                                       onPressed: (){
+                                         setState(() {
+                                           SettingsConfig.display="Deny";
+                                           store.record("Display").exists(db_handler.db).then((exist){
+                                             if(exist){
+                                              store.record("Display").update(db_handler.db, "Deny");
+                                             }else{
+                                                store.record("Display").add(db_handler.db, "Deny");
+                                             }
+                                           });
+                                         });
+                                          Navigator.of(context).pop();
+                                         }
+                                       
+                                     ),
+                                     CupertinoDialogAction(
+                                       child: Text("Allow",style: TextStyle(color: Colors.red),),
+                                       onPressed: (){
+                                         setState(() {
+                                           SettingsConfig.display="Allow";
+                                            store.record("Display").exists(db_handler.db).then((exist){
+                                             if(exist){
+                                              store.record("Display").update(db_handler.db, "Allow");
+                                             }else{
+                                                store.record("Display").add(db_handler.db, "Aloow");
+                                             }
+                                             
+                                             
+                                           });
+                                         });
+                                          Navigator.of(context).pop();
+                                         }
+                                     ),
+                                     
                                   ],
 
                                 )
@@ -607,45 +676,7 @@ class _SetUpState extends State<SetUp> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Material(
-                      
-                      borderRadius: BorderRadius.circular(20),
-                      child: Column(
-                        children: <Widget>[
-                         (_controller.text.isEmpty || "app drawer".startsWith(_controller.text.toLowerCase()))? ListTile(
-                            leading: Icon(Icons.dashboard,color: Colors.grey,),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("App Drawer",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Switch(
-                                  activeColor: Colors.redAccent,
-                                  onChanged: (_){setState(() {
-                                    SystemConfig.appdraw=_;
-                                    store.record("appdraw").exists(db_handler.db).then((exist){
-                                      if(exist){
-                                        store.record("appdraw").update(db_handler.db,_);
-                                      }else{
-                                        store.record("appdraw").add(db_handler.db,_);
-                                      }
-                                    });
-                                });},value: SystemConfig.appdraw==null?true:SystemConfig.appdraw,)
-                              ],
-                            ),
-                            // trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: (){
-                              var route = MaterialPageRoute(builder: (context)=>AppSetUp());
-                              Navigator.push(context, route);
-                            },
-                            ):Center(),
-                               
-                              
-                        ],
-                      ),
-                    ),
-                  ),
+                  
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(

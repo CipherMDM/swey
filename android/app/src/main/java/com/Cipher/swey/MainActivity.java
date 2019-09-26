@@ -104,23 +104,46 @@ public class MainActivity extends FlutterActivity{
             } 
             else if (call.method.equals("OpenAero")) {
               startActivity(new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS));
+            }  
+            else if (call.method.equals("OpenSettings")) {
+              startActivity(new Intent(Settings.ACTION_SETTINGS));
             }   
 
             //kiosk set up
 
             else if (call.method.equals("Activate")) {
 
-               apps.allowed_Apps = call.argument("apps");
-               System.out.println("Called me");
-               System.out.println(apps.allowed_Apps);
+                 Intent intent = new Intent(context, BackgroundService.class);
+                 startService(intent);
+               
             
             }  
+
+            else if (call.method.equals("Deactivate")) {
+
+                 Intent myService = new Intent(context, BackgroundService.class);
+                 stopService(myService);
+               
+            
+            }  
+
+            else if (call.method.equals("LoadApps")) {
+              List<String> _apps = call.argument("Apps");
+              for(int i=0;i<_apps.size();i++){
+                AllowedApps.Apps.add(_apps.get(i));
+              }
+             
+            }
+
+            
 
             else if (call.method.equals("GetPermissions")) {
 
               
             
             }  
+
+           
 
 
         }  
@@ -140,6 +163,12 @@ public class MainActivity extends FlutterActivity{
        
        
       }
+  }
+
+
+  @Override
+  public void onBackPressed() {
+      return;
   }
 
 

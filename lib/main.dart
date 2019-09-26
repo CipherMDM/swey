@@ -13,20 +13,21 @@ class View extends StatefulWidget {
 
 class _ViewState extends State<View> {
 
+  
+
   @override
   void initState() {
     super.initState();
-  }
+      
+   }
 
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIOverlays ([SystemUiOverlay.top]);
-   
-    return MaterialApp(
-      
-      theme: ThemeData(
-        
+
+     return MaterialApp(
+        theme: ThemeData(
         primaryColor: Colors.redAccent
       ),
       debugShowCheckedModeBanner: false,

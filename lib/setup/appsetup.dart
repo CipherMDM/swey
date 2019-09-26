@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
 import 'package:swey/systemconfig.dart';
@@ -128,6 +129,7 @@ class _CheckBoxState extends State<CheckBox> {
       
     }
   }
+  static const methodChannel = const MethodChannel("com.Cipher");
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +148,7 @@ class _CheckBoxState extends State<CheckBox> {
                                added=false;
                          }
                          db_handler.store.record("Apps").update(db_handler.db, SystemConfig.appNames);
+                         methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames});
                      });
       },
       child: CircleAvatar(
