@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,8 +34,22 @@ class _SetUpState extends State<SetUp> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool singlemode = false;
    
-    return Scaffold(
+    return Scaffold(            
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black,
+        currentIndex: 0,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.settings),title: Container()),
+          BottomNavigationBarItem(icon: Image.asset("lib/assets/iconfinder_qrcode_1608801.png",height: 25,),title: Container()),
+          BottomNavigationBarItem(icon: Icon(Icons.cloud),title: Container())
+        ],
+      ),
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
@@ -100,7 +112,14 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Wifi",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.wifi!=null?SettingsConfig.wifi:"",style: TextStyle(fontSize: 14),),
+                                 Text(SettingsConfig.wifi!=null?SettingsConfig.wifi:"",
+                                 style: TextStyle(fontSize: 14,
+                                   color: SettingsConfig.wifi=="user"?Colors.red:
+                                          SettingsConfig.wifi=="off"?Colors.blue:
+                                          SettingsConfig.wifi=="on"?Colors.green:Colors.transparent
+                                 ),
+                                    
+                                 ),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -184,7 +203,14 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("HotSpot",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.hotspot!=null?SettingsConfig.hotspot:"",style: TextStyle(fontSize: 14),),
+                                 Text(SettingsConfig.hotspot!=null?SettingsConfig.hotspot:"",style: TextStyle(fontSize: 14,
+                                     color: SettingsConfig.hotspot=="user"?Colors.red:
+                                          SettingsConfig.hotspot=="off"?Colors.blue:
+                                          SettingsConfig.hotspot=="on"?Colors.green:Colors.transparent
+                                 
+                                 ),
+                                    
+                                 ),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -228,7 +254,7 @@ class _SetUpState extends State<SetUp> {
                                              }
                                              
                                            });
-                                         });
+                                         });      
                                           Navigator.of(context).pop();
                                        },
                                      ),
@@ -261,7 +287,12 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Bluetooth",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.bluetooth!=null?SettingsConfig.bluetooth:"",style: TextStyle(fontSize: 14),),
+                                 Text(SettingsConfig.bluetooth!=null?SettingsConfig.bluetooth:"",style: TextStyle(fontSize: 14,
+                                     color: SettingsConfig.bluetooth=="user"?Colors.red:
+                                          SettingsConfig.bluetooth=="off"?Colors.blue:
+                                          SettingsConfig.bluetooth=="on"?Colors.green:Colors.transparent
+                                 
+                                 ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -338,7 +369,12 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Aeroplane mode",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.aeroplane_mode!=null?SettingsConfig.aeroplane_mode:"",style: TextStyle(fontSize: 14),),
+                                 Text(SettingsConfig.aeroplane_mode!=null?SettingsConfig.aeroplane_mode:"",style: TextStyle(fontSize: 14,
+                                  color: SettingsConfig.aeroplane_mode=="user"?Colors.red:
+                                          SettingsConfig.aeroplane_mode=="off"?Colors.blue:
+                                          SettingsConfig.aeroplane_mode=="on"?Colors.green:Colors.transparent
+                                 
+                                 ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -415,7 +451,12 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Mobile Data",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.mobile_data!=null?SettingsConfig.mobile_data:"",style: TextStyle(fontSize: 14),),
+                                 Text(SettingsConfig.mobile_data!=null?SettingsConfig.mobile_data:"",style: TextStyle(fontSize: 14,
+                                     color: SettingsConfig.mobile_data=="user"?Colors.red:
+                                          SettingsConfig.mobile_data=="off"?Colors.blue:
+                                          SettingsConfig.mobile_data=="on"?Colors.green:Colors.transparent
+                                
+                                 ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -491,7 +532,14 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Sound",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.sound!=null?SettingsConfig.sound:"",style: TextStyle(fontSize: 13),),
+                                 Text(SettingsConfig.sound!=null?SettingsConfig.sound:"",style: TextStyle(fontSize: 13,
+
+                                  color: SettingsConfig.sound=="Allow"?Colors.red:
+                                          SettingsConfig.sound=="Deny"?Colors.blue:
+                                          Colors.transparent
+                                 
+                                 
+                                 ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -530,7 +578,7 @@ class _SetUpState extends State<SetUp> {
                                              if(exist){
                                               store.record("sound").update(db_handler.db, "Allow");
                                              }else{
-                                                store.record("sound").add(db_handler.db, "Aloow");
+                                                store.record("sound").add(db_handler.db, "Allow");
                                              }
                                              
                                              
@@ -553,7 +601,11 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Display",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.display!=null?SettingsConfig.display:"",style: TextStyle(fontSize: 13),),
+                                 Text(SettingsConfig.display!=null?SettingsConfig.display:"",style: TextStyle(fontSize: 13,
+                                    color: SettingsConfig.display=="Allow"?Colors.red:
+                                          SettingsConfig.display=="Deny"?Colors.blue:
+                                          Colors.transparent
+                                 ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -592,7 +644,7 @@ class _SetUpState extends State<SetUp> {
                                              if(exist){
                                               store.record("Display").update(db_handler.db, "Allow");
                                              }else{
-                                                store.record("Display").add(db_handler.db, "Aloow");
+                                                store.record("Display").add(db_handler.db, "Allow");
                                              }
                                              
                                              
@@ -614,7 +666,12 @@ class _SetUpState extends State<SetUp> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Camera",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Text(SettingsConfig.camera!=null?SettingsConfig.camera:"",style: TextStyle(fontSize: 13),),
+                                Text(SettingsConfig.camera!=null?SettingsConfig.camera:"",style: TextStyle(fontSize: 13,
+                                   color: SettingsConfig.camera=="Allow"?Colors.red:
+                                          SettingsConfig.camera=="Deny"?Colors.blue:
+                                          Colors.transparent
+                                
+                                ),),
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
@@ -676,7 +733,7 @@ class _SetUpState extends State<SetUp> {
                       ),
                     ),
                   ),
-                  
+
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(
@@ -693,6 +750,46 @@ class _SetUpState extends State<SetUp> {
                               Navigator.push(context, route);
                             },
                             ):Center(),
+
+                           SystemConfig.appNames.length>1?Center():(_controller.text.isEmpty || "single app mode".startsWith(_controller.text.toLowerCase()))? ListTile(
+                            leading: Icon(Icons.touch_app,color: Colors.blue,),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("Single App Mode",style: TextStyle(fontWeight: FontWeight.bold),),
+                                Switch(onChanged: (_){
+                                    if(SystemConfig.appNames.length==1){
+                                      singlemode=true;
+                                      
+                                    }else{
+                                      singlemode=false;
+                                    }
+                                    setState(() {
+                                      
+                                    });
+                                }
+                                ,value: singlemode,)
+                              ],
+                            ),
+                         
+                            onTap: (){
+                              var route = MaterialPageRoute(builder: (context)=>AppSetUp());
+                              Navigator.push(context, route);
+                            },
+                            ):Center(),
+                            
+                            ]
+                            ))
+                  ),
+                  
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Material(
+                      
+                      borderRadius: BorderRadius.circular(20),
+                      child: Column(
+                        children: <Widget>[
+                         
                             
                             
                            double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])>=6?(_controller.text.isEmpty || "permissions".startsWith(_controller.text.toLowerCase()))? ListTile(

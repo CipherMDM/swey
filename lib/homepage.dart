@@ -151,11 +151,14 @@ class _HomeState extends State<Home> {
              
 
            });
+
+          
           }
    
      
 
     });
+
 
   }
 
@@ -168,11 +171,10 @@ class _HomeState extends State<Home> {
         methodChannel.invokeMethod("Deactivate");
         PermissionsKiosk.currentLauncher().then((_){
               loaded=true;
-               methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames});
+               methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames:[]});
               if(_){
                
-                    methodChannel.invokeMethod("Activate");
-               
+                    // methodChannel.invokeMethod("Activate");
                 
               }
               setState(() {
@@ -181,7 +183,8 @@ class _HomeState extends State<Home> {
         });
          
 
-    });});
+     });
+    });
     getApps().then((_){
          getdata();
          
@@ -206,143 +209,151 @@ class _HomeState extends State<Home> {
    
    
     return Scaffold(
-        backgroundColor: Colors.black,
-        body: !loaded?Center(child: CircularProgressIndicator(),): Builder(
-          builder:(context)=> GestureDetector(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(     
-              image: DecorationImage(
-                image: wallpaper.image,
-                fit: BoxFit.fill
-                ) 
-            ),
 
-            child: GestureDetector(
-              onTap: (){
-                setState(() {
-                  
-                });
-              },
-              child: Padding(
-                         padding: const EdgeInsets.only(top:18.0,bottom: 10,),
-                         child: Column(
-                           mainAxisAlignment: MainAxisAlignment.end,
-                           children: <Widget>[
-
-                             Expanded(
-                               child: Padding(
-                                 padding: const EdgeInsets.only(top:0,bottom: 10),
-                                 child: GridView.count(
-                              
-                               crossAxisCount: 4,
-                             
-                              children: _controller.text.isEmpty? List.generate(SystemConfig.apps.length, (i) {
-                                return Container(
-                                height: 100,
-                                child: GestureDetector(
-                                onTap: (){DeviceApps.openApp(SystemConfig.apps[i].packageName);},
-                                child: Center(
-                                  child:Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 55,
-                                        child: SystemConfig.apps[i].appIcon,
-                                      ),
-                                      Center(child: Text(SystemConfig.apps[i].appNmae.toString().length>8?SystemConfig.apps[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
-                                      ,style:TextStyle(
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontSize: 12
-                                      )
-                                      )
-                                      )
-                                      
-                                    ],
-                                  ) 
-                                ),
-                              )
-                                
-                              );
-                               }):List.generate(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList().length, (i) {
-                                return Container(
-                                height: 100,
-                                child: GestureDetector(
-                                onTap: (){DeviceApps.openApp(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].packageName);},
-                                child: Center(
-                                  child:Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Container(
-                                        height: 55,
-                                        child: SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appIcon,
-                                      ),
-                                      Center(child: Text(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().length>8?SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
-                                      ,style:TextStyle(
-                                        color: Colors.white.withOpacity(0.8),
-                                        fontSize: 12
-                                      )
-                                      )
-                                      )
-                                      
-                                    ],
-                                  ) 
-                                ),
-                              )
-                                
-                              );
-                               })
-                           )
-
-                               
-                               ),
-                             ),
-                           
-                     Padding(
-                      padding: const EdgeInsets.only(top:8.0,left: 10,right: 10),
-                      child:Container(
-                          height: 40,
-                       child: ListTile(
-                         trailing: IconButton(icon: Icon(Icons.settings,color: Colors.white.withOpacity(0.8)),
-                          onPressed: (){
-                              var route = CupertinoPageRoute(builder: (context)=>Settings());
-                              Navigator.push(context, route);
-                          },
-                         ),
-                         title: Container(
-                           decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Colors.white),
-                           child: TextField(
-                            controller: _controller,
-                            onChanged: (text){
-                                  setState(() {
-                                    
-                                    
-                                  });
-                            },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(top:16,bottom: 8,right: 10,left: 14),
-                              prefixIcon: Icon(Icons.search),
-                              hintText: "Search",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40)
-                              )
-                            ),
-                      ),
-                         ),
-                       ),
-                    ),
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: <Widget>[
+            Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(     
+                  image: DecorationImage(
+                    image: wallpaper.image,
+                    fit: BoxFit.fill
+                    ) 
                 ),
-                Padding(padding: EdgeInsets.all(10),)
-                              
-                           ],
-                         ),
+                ),
+            !loaded?Center(child: CircularProgressIndicator(),): Builder(
+              builder:(context)=> GestureDetector(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+               
+                child: GestureDetector(
+                  onTap: (){
+                    setState(() {
                       
-                 ),
-            ),
-          
-            
-          ),
+                    });
+                  },
+                  child: Padding(
+                             padding: const EdgeInsets.only(top:18.0,bottom: 10,),
+                             child: Column(
+                               mainAxisAlignment: MainAxisAlignment.end,
+                               children: <Widget>[
+
+                                 Expanded(
+                                   child: Padding(
+                                     padding: const EdgeInsets.only(top:0,bottom: 10),
+                                     child: GridView.count(
+                                  
+                                   crossAxisCount: 4,
+                                 
+                                  children: _controller.text.isEmpty? List.generate(SystemConfig.apps.length, (i) {
+                                    return Container(
+                                    height: 100,
+                                    child: GestureDetector(
+                                    onTap: (){DeviceApps.openApp(SystemConfig.apps[i].packageName);},
+                                    child: Center(
+                                      child:Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Container(
+                                            height: 55,
+                                            child: SystemConfig.apps[i].appIcon,
+                                          ),
+                                          Center(child: Text(SystemConfig.apps[i].appNmae.toString().length>8?SystemConfig.apps[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
+                                          ,style:TextStyle(
+                                            color: Colors.white.withOpacity(0.8),
+                                            fontSize: 12
+                                          )
+                                          )
+                                          )
+                                          
+                                        ],
+                                      ) 
+                                    ),
+                                  )
+                                    
+                                  );
+                                   }):List.generate(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList().length, (i) {
+                                    return Container(
+                                    height: 100,
+                                    child: GestureDetector(
+                                    onTap: (){DeviceApps.openApp(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].packageName);},
+                                    child: Center(
+                                      child:Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Container(
+                                            height: 55,
+                                            child: SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appIcon,
+                                          ),
+                                          Center(child: Text(SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().length>8?SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString().substring(0,8)+"..":SystemConfig.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()
+                                          ,style:TextStyle(
+                                            color: Colors.white.withOpacity(0.8),
+                                            fontSize: 12
+                                          )
+                                          )
+                                          )
+                                          
+                                        ],
+                                      ) 
+                                    ),
+                                  )
+                                    
+                                  );
+                                   })
+                               )
+
+                                   
+                                   ),
+                                 ),
+                               
+                         Padding(
+                          padding: const EdgeInsets.only(top:8.0,left: 10,right: 10),
+                          child:Container(
+                              height: 40,
+                           child: ListTile(
+                             trailing: IconButton(icon: Icon(Icons.settings,color: Colors.white.withOpacity(0.8)),
+                              onPressed: (){
+                                  var route = CupertinoPageRoute(builder: (context)=>Settings());
+                                  Navigator.push(context, route);
+                              },
+                             ),
+                             title: Container(
+                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(40),color: Colors.white),
+                               child: TextField(
+                                controller: _controller,
+                                onChanged: (text){
+                                      setState(() {
+                                        
+                                        
+                                      });
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(top:16,bottom: 8,right: 10,left: 14),
+                                  prefixIcon: Icon(Icons.search),
+                                  hintText: "Search",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(40)
+                                  )
+                                ),
+                          ),
+                             ),
+                           ),
+                        ),
+                    ),
+                    Padding(padding: EdgeInsets.all(10),)
+                                  
+                               ],
+                             ),
+                          
+                     ),
+                ),
+              
+                
+              ),
       ),
+            ),
+          ],
         ),
 
     );

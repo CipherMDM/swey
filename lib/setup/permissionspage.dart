@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
@@ -26,6 +27,11 @@ class _PermissionsState extends State<PermissionsPage> {
 
   Color perm = Colors.transparent;
   bool isperm = false;
+
+  Color usb = Colors.transparent;
+  bool isusb = false;
+
+  static const methodChannel = const MethodChannel("com.Cipher");
   
   // List<PermissionGroup> permissionNameList = [    PermissionGroup.calendar,
   //                                                 PermissionGroup.camera,
@@ -37,6 +43,15 @@ class _PermissionsState extends State<PermissionsPage> {
   //                                                 PermissionGroup.phone
   //                                                 ];
 
+
+   Future<bool> isusbenabled(){
+     return methodChannel.invokeMethod("isDebug");     
+   }
+
+  
+      
+  
+   
   initSettings()async{
 
     await PermissionsKiosk.currentLauncher().then((islan){
@@ -90,6 +105,14 @@ class _PermissionsState extends State<PermissionsPage> {
                                            }
                            }); 
 
+   await  isusbenabled().then((_){
+     
+      if(!_){
+         usb = Colors.green;
+        
+      }
+    });
+
 
     //  for(int i=0;i<permissionNameList.length;i++){
     //    if(permisson.permissions.isNotEmpty){
@@ -127,7 +150,7 @@ class _PermissionsState extends State<PermissionsPage> {
   void initState() {
     initSettings();
     super.initState();
-    t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted? initSettings():null);
+    t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted?initSettings():null);
    
   }
 
@@ -373,7 +396,23 @@ class _PermissionsState extends State<PermissionsPage> {
                       child: Column(
                         children: <Widget>[
                           ListTile(
-                            leading: Icon(Icons.people,color: Colors.deepPurple,),
+                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            leading: Icon(Icons.usb,color: Colors.red,),
+                            
+                            title:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
+                                Icon(CupertinoIcons.check_mark_circled_solid,color: usb,)
+                               
+                              ],
+                            ),
+                            onTap: (){
+                                methodChannel.invokeMethod("OpenDev");
+                            },
+                            ),
+                          ListTile(
+                            leading: Icon(Icons.person,color: Colors.deepPurple,),
                             title: Text("Activate Device Admin",style: TextStyle(fontWeight: FontWeight.bold),),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
                             onTap: (){

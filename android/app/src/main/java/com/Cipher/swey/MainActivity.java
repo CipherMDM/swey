@@ -37,9 +37,11 @@ import android.content.pm.PackageManager;
 import android.Manifest;
 import android.content.pm.ResolveInfo;
 import android.content.ComponentName;
-import 	android.content.IntentFilter;
+import android.content.IntentFilter;
 import java.util.ArrayList;
 import java.util.*;
+import android.view.KeyEvent;
+
 
 
 
@@ -134,13 +136,24 @@ public class MainActivity extends FlutterActivity{
               }
              
             }
-
-            
-
-            else if (call.method.equals("GetPermissions")) {
-
               
-            
+           else if (call.method.equals("isDebug")) {
+
+                if(Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.ADB_ENABLED, 0) == 1) {
+                    // debugging enabled 
+                     result.success(true);
+                } else {
+                    //;debugging does not enabled
+                     result.success(false);
+                }
+              
+             
+            }
+
+ 
+            else if (call.method.equals("OpenDev")) {
+               startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
+              
             }  
 
            
@@ -151,6 +164,7 @@ public class MainActivity extends FlutterActivity{
 
     
   }
+
 
 
   @Override
