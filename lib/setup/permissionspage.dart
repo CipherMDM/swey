@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
 import 'package:swey/DataBase/db.dart';
-import 'package:swey/systemconfig.dart';
+import 'package:swey/setUp.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 
 class PermissionsPage extends StatefulWidget {
+  bool back;
+  PermissionsPage({this.back});
   @override
   _PermissionsState createState() => _PermissionsState();
 }
@@ -49,10 +51,7 @@ class _PermissionsState extends State<PermissionsPage> {
      return methodChannel.invokeMethod("isDebug");     
    }
 
-  
-      
-  
-   
+ 
   initSettings()async{
 
     await PermissionsKiosk.currentLauncher().then((islan){
@@ -162,14 +161,12 @@ class _PermissionsState extends State<PermissionsPage> {
   void initState() {
     initSettings();
     super.initState();
-    if(!SystemConfig.isexist)
-         t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted?initSettings():null);
+    t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted?initSettings():null);
    
   }
 
   @override
   void dispose() {
-   
     super.dispose();
     t.cancel();
   }
@@ -190,7 +187,7 @@ class _PermissionsState extends State<PermissionsPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},),
+        leading:widget.back==null? IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},):Center(),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.exit_to_app,color: Colors.transparent,),onPressed: (){},)
         ],
@@ -247,7 +244,7 @@ class _PermissionsState extends State<PermissionsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Icon(CupertinoIcons.check_mark_circled_solid,color: usb,)
+                                isusb? Icon(CupertinoIcons.check_mark_circled_solid,color: usb,):Icon(CupertinoIcons.circle_filled,color: Colors.red,)
                                
                               ],
                             ),
@@ -263,7 +260,7 @@ class _PermissionsState extends State<PermissionsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Enable Usage Access",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Icon(CupertinoIcons.check_mark_circled_solid,color: usage,)
+                                isusage?Icon(CupertinoIcons.check_mark_circled_solid,color: usage,):Icon(CupertinoIcons.circle_filled,color: Colors.red,)
 
                              
                               ],
@@ -282,7 +279,7 @@ class _PermissionsState extends State<PermissionsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Overlay Permission",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Icon(CupertinoIcons.check_mark_circled_solid,color: draw,)
+                                isdraw? Icon(CupertinoIcons.check_mark_circled_solid,color: draw,):Icon(CupertinoIcons.circle_filled,color: Colors.red,)
                                  
                               ],
                             ),
@@ -300,39 +297,42 @@ class _PermissionsState extends State<PermissionsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text("Write Settings",style: TextStyle(fontWeight: FontWeight.bold),),  
-                                Icon(CupertinoIcons.check_mark_circled_solid,color: write,)
+                               iswrite? Icon(CupertinoIcons.check_mark_circled_solid,color: write,):Icon(CupertinoIcons.circle_filled,color: Colors.red,)
                               ],
                             ),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
                             onTap: (){
 
-                                    
-                                                         PermissionsKiosk.getWriteSettings();  
+                               PermissionsKiosk.getWriteSettings();  
                                       
                              
                             },
                             ),
-                            ListTile(
-                            leading: Icon(Icons.security,color: Colors.pinkAccent),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("Other Permissions",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Icon(CupertinoIcons.check_mark_circled_solid,color: perm,)
-                               
-                              ],
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: ()async{
-                              
-                            //  permisson.permissions =  await PermissionHandler().requestPermissions(permissionNameList);
-                            //  setState(() {
-                               
-                            //  });                                        
-                                       
-                            },
+                           
 
-                            ),
+
+
+                            // ListTile(
+                            // leading: Icon(Icons.security,color: Colors.pinkAccent),
+                            // title: Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+                            //     Text("Other Permissions",style: TextStyle(fontWeight: FontWeight.bold),),
+                            //     Icon(CupertinoIcons.check_mark_circled_solid,color: perm,)
+                               
+                            //   ],
+                            // ),
+                            // trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            // onTap: ()async{
+                              
+                            // //  permisson.permissions =  await PermissionHandler().requestPermissions(permissionNameList);
+                            // //  setState(() {
+                               
+                            // //  });                                        
+                                       
+                            // },
+
+                            // ),
                               
                         ],
                       ),
@@ -346,7 +346,24 @@ class _PermissionsState extends State<PermissionsPage> {
                       child: Column(
                         children: <Widget>[
                            ListTile(
-                            leading: Icon(Icons.home,color: Colors.blueAccent),
+                            leading: Icon(Icons.lock,color: Colors.orange),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("Kiosk Policy",style: TextStyle(fontWeight: FontWeight.bold),),  
+                               
+                              ],
+                            ),
+                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            onTap: (){
+
+                              Navigator.push(context,CupertinoPageRoute(builder: (context)=>SetUp()));
+                                      
+                             
+                            },
+                            ),
+                           ListTile(
+                            leading: Icon(Icons.home,color:Colors.pinkAccent),
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[

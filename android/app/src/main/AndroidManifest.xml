@@ -7,12 +7,13 @@
       tools:ignore="ProtectedPermissions"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
   
 
-    //added to use plugin
+  
 
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <!-- <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -36,7 +37,7 @@
     <uses-permission android:name="android.permission.RECEIVE_WAP_PUSH" />
     <uses-permission android:name="android.permission.RECEIVE_MMS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -71,6 +72,11 @@
             </intent-filter>
         </activity>
         <service android:name=".BackgroundService" android:exported="false" /> 
+          <receiver android:name=".BootCompletedIntentReceiver">
+             <intent-filter>
+               <action android:name="android.intent.action.BOOT_COMPLETED" />
+             </intent-filter>
+          </receiver>
          <receiver 
              android:name=".MyDeviceAdminReceiver"
              android:permission="android.permission.BIND_DEVICE_ADMIN">

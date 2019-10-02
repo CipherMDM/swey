@@ -1,66 +1,36 @@
 package com.Cipher.swey;
 
 import android.app.Service;
-import android.content.*;
-import android.os.*;
-import android.widget.Toast;
-import android.app.admin.DevicePolicyManager;
-import android.os.Bundle;
-import io.flutter.app.FlutterActivity;
-import io.flutter.plugins.GeneratedPluginRegistrant;
 import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import io.flutter.view.FlutterView;
-import android.app.Service;
-import java.util.ArrayList;
 import android.view.KeyEvent;
 import java.util.*;
-import java.util.List;
 import android.os.Handler;
 import 	java.lang.reflect.Method;
 import android.app.usage.UsageStatsManager;
 import 	android.app.usage.UsageStats;
-import java.util.Arrays;
-import android.content.Intent;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Toast;
 import 	android.view.ViewGroup;
-import android.content.Context;
 import android.view.MotionEvent;
 import android.view.Gravity;
 import android.graphics.PixelFormat;
 import android.provider.Settings;
 import android.view.WindowManager;
 import android.view.Window;
-import android.content.ComponentName;
 import android.view.GestureDetector;
-import android.app.admin.DeviceAdminReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.app.ActivityManager;
 import android.content.ComponentName;
-import android.widget.Toast;
 import android.app.admin.DevicePolicyManager;
 import android.app.ActivityManager;
-import android.content.Context;
 import android.app.admin.DeviceAdminReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
 import android.content.pm.PackageManager;
 import android.app.PendingIntent;
 import android.content.pm.PackageInstaller;
@@ -88,26 +58,16 @@ public class BackgroundService extends Service {
         Toast.makeText(this, "Kiosk activated!", Toast.LENGTH_LONG).show();
         handler = new Handler();
         runnable = new Runnable() {
-            public void run() {
+            public void run() {            
               
-               
-                // List<String> apps = new ArrayList<>();
-                // apps.add("com.Cipher.swey");
-
-                // for(int i =0 ;i<AllowedApps.Apps.size();i++){
-                //     apps.add(AllowedApps.Apps.get(i));
-                // }
-                
-  
-
                 if(!AllowedApps.Apps.contains(getForegroundApp())){
                     showHomeScreen();
                   }
                 handler.postDelayed(runnable, 1000);
             }
         };
-
-        handler.postDelayed(runnable, 15000);
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     @Override

@@ -148,7 +148,7 @@ class _CheckBoxState extends State<CheckBox> {
                                added=false;
                          }
                          db_handler.store.record("Apps").update(db_handler.db, SystemConfig.appNames);
-                         methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames});
+                         methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","android"]});
                      });
       },
       child: CircleAvatar(

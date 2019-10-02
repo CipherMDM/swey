@@ -121,13 +121,16 @@ public class MainActivity extends FlutterActivity{
 
                  Intent intent = new Intent(context, BackgroundService.class);
                  startService(intent);
+
+                 Intent intent2 = new Intent(context, BackgroundService.class);
+                 startService(intent2);
                
             
             }  
 
             else if (call.method.equals("Deactivate")) {
 
-                 Intent myService = new Intent(context, BackgroundService.class);
+                 Intent myService = new Intent(context, BootCompletedIntentReceiver.class);
                  stopService(myService);
                
             
@@ -138,6 +141,7 @@ public class MainActivity extends FlutterActivity{
 
             else if (call.method.equals("LoadApps")) {
               List<String> _apps = call.argument("Apps");
+              AllowedApps.Apps.clear();
               for(int i=0;i<_apps.size();i++){
                 AllowedApps.Apps.add(_apps.get(i));
               }

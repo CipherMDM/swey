@@ -7,6 +7,7 @@ import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
 import 'package:swey/settings.dart';
 import 'package:swey/settingsconfig.dart';
+import 'package:swey/setup/permissionspage.dart';
 import 'package:swey/systemconfig.dart';
 import 'DataBase/AppDatabase.dart';
 import 'setUp.dart';
@@ -111,15 +112,15 @@ class _HomeState extends State<Home> {
    db_handler.store.record("SetUp").exists(db_handler.db).then((bool isexit){
   
            if(!isexit){
-             SystemConfig.isexist=false;
-              // setupdialog();
+              SystemConfig.isexist=false;
           }else{
+            SystemConfig.isexist=true; 
            db_handler.store.record("wifi").get(db_handler.db).then((st){
               SettingsConfig.wifi= st;
             });
-           db_handler.store.record("hotSpot").get(db_handler.db).then((st){
-              SettingsConfig.hotspot= st;
-            });
+          //  db_handler.store.record("hotSpot").get(db_handler.db).then((st){
+          //     SettingsConfig.hotspot= st;
+          //   });
            db_handler.store.record("bluetooth").get(db_handler.db).then((st){
               SettingsConfig.bluetooth= st;
             });
@@ -132,9 +133,9 @@ class _HomeState extends State<Home> {
            db_handler.store.record("sound").get(db_handler.db).then((st){
               SettingsConfig.sound= st;
             });
-           db_handler.store.record("camera").get(db_handler.db).then((st){
-              SettingsConfig.camera= st;
-            });
+          //  db_handler.store.record("camera").get(db_handler.db).then((st){
+          //     SettingsConfig.camera= st;
+          //   });
            db_handler.store.record("Display").get(db_handler.db).then((st){
               SettingsConfig.display= st;
             }); 
@@ -148,6 +149,8 @@ class _HomeState extends State<Home> {
                   }
 
                 }
+
+                loaded=true;
              
 
            });
@@ -166,29 +169,23 @@ class _HomeState extends State<Home> {
   
   @override
   void initState() {
-    super.initState();
-    Timer(Duration(seconds: 7),(){setState(() {
-        methodChannel.invokeMethod("Deactivate");
-        PermissionsKiosk.currentLauncher().then((_){
-              loaded=true;
-               methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames:[]});
-              if(_ && SystemConfig.isexist){
-                
-                    methodChannel.invokeMethod("Activate");
-                 
-              }
-              setState(() {
-                
-              });
-        });
-         
-
-     });
-    });
     getApps().then((_){
          getdata();
+           
          
     });
+    Timer(Duration(seconds: 5),(){setState(() {
+              loaded=true;
+              methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","android"]:["android","com.Cipher.swey","com.android.systemui"]});
+              if(SystemConfig.isexist){
+                methodChannel.invokeMethod("Activate");         
+              }
+   
+     });
+    });
+
+    super.initState();
+    
    
     
     
@@ -222,7 +219,7 @@ class _HomeState extends State<Home> {
                     ) 
                 ),
                 ),
-            !loaded?SplashScreen(): (!SystemConfig.isexist)?SetUp(back:true):Builder(
+            !loaded?SplashScreen():(!SystemConfig.isexist)?PermissionsPage(back:true):Builder(
               builder:(context){
                
                 return GestureDetector(

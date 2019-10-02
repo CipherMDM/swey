@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -59,9 +61,8 @@ class _SetUpState extends State<SetUp> {
         leading: widget.back==null? IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},):Center(),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.highlight_off,color: Colors.red,),onPressed: (){
-             methodChannel.invokeMethod("Deactivate").then((_){
-                methodChannel.invokeMethod("OpenSettings");
-             });
+        
+             exit(0);
              
           },)
         ],
@@ -199,90 +200,90 @@ class _SetUpState extends State<SetUp> {
                               );
                             },
                             ):Center(),
-                            (_controller.text.isEmpty || "hotspot".startsWith(_controller.text.toLowerCase()))? ListTile(
-                            leading: Icon(Icons.wifi_tethering,color: Colors.blueGrey,),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("HotSpot",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Text(SettingsConfig.hotspot!=null?SettingsConfig.hotspot:"",style: TextStyle(fontSize: 14,
-                                     color: SettingsConfig.hotspot=="user"?Colors.red:
-                                          SettingsConfig.hotspot=="off"?Colors.blue:
-                                          SettingsConfig.hotspot=="on"?Colors.green:Colors.transparent
+                            // (_controller.text.isEmpty || "hotspot".startsWith(_controller.text.toLowerCase()))? ListTile(
+                            // leading: Icon(Icons.wifi_tethering,color: Colors.blueGrey,),
+                            // title: Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+                            //     Text("HotSpot",style: TextStyle(fontWeight: FontWeight.bold),),
+                            //      Text(SettingsConfig.hotspot!=null?SettingsConfig.hotspot:"",style: TextStyle(fontSize: 14,
+                            //          color: SettingsConfig.hotspot=="user"?Colors.red:
+                            //               SettingsConfig.hotspot=="off"?Colors.blue:
+                            //               SettingsConfig.hotspot=="on"?Colors.green:Colors.transparent
                                  
-                                 ),
+                            //      ),
                                     
-                                 ),
-                              ],
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: (){
-                              showDialog(
-                                context: context,
-                                builder: (context)=>CupertinoAlertDialog(
+                            //      ),
+                            //   ],
+                            // ),
+                            // trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            // onTap: (){
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (context)=>CupertinoAlertDialog(
 
-                                  title: Text("HotSpot"),
+                            //       title: Text("HotSpot"),
                                   
                                  
-                                  actions: <Widget>[
-                                     CupertinoDialogAction(
-                                       child: Text("Always on"),
-                                       onPressed: (){
-                                         setState(() {
-                                           SettingsConfig.hotspot="on";
-                                           store.record("hotSpot").exists(db_handler.db).then((exist){
-                                             if(exist){
-                                              store.record("hotSpot").update(db_handler.db, "on");
-                                             }else{
-                                                store.record("hotSpot").add(db_handler.db, "on");
-                                             }
+                            //       actions: <Widget>[
+                            //          CupertinoDialogAction(
+                            //            child: Text("Always on"),
+                            //            onPressed: (){
+                            //              setState(() {
+                            //                SettingsConfig.hotspot="on";
+                            //                store.record("hotSpot").exists(db_handler.db).then((exist){
+                            //                  if(exist){
+                            //                   store.record("hotSpot").update(db_handler.db, "on");
+                            //                  }else{
+                            //                     store.record("hotSpot").add(db_handler.db, "on");
+                            //                  }
                                              
-                                           });
-                                         });
-                                          Navigator.of(context).pop();
-                                       },
+                            //                });
+                            //              });
+                            //               Navigator.of(context).pop();
+                            //            },
                                        
-                                     ),
-                                     CupertinoDialogAction(
-                                       child: Text("Always off"),
-                                       onPressed: (){
-                                         setState(() {
-                                           SettingsConfig.hotspot="off";
-                                           store.record("hotSpot").exists(db_handler.db).then((exist){
-                                             if(exist){
-                                              store.record("hotSpot").update(db_handler.db, "off");
-                                             }else{
-                                               store.record("hotSpot").add(db_handler.db, "off");
-                                             }
+                            //          ),
+                            //          CupertinoDialogAction(
+                            //            child: Text("Always off"),
+                            //            onPressed: (){
+                            //              setState(() {
+                            //                SettingsConfig.hotspot="off";
+                            //                store.record("hotSpot").exists(db_handler.db).then((exist){
+                            //                  if(exist){
+                            //                   store.record("hotSpot").update(db_handler.db, "off");
+                            //                  }else{
+                            //                    store.record("hotSpot").add(db_handler.db, "off");
+                            //                  }
                                              
-                                           });
-                                         });      
-                                          Navigator.of(context).pop();
-                                       },
-                                     ),
-                                     CupertinoDialogAction(
-                                       child: Text("Allow user",style: TextStyle(color: Colors.red),),
-                                       onPressed: (){
-                                         setState(() {
-                                          SettingsConfig.hotspot="user";
-                                          store.record("hotSpot").exists(db_handler.db).then((exist){
-                                             if(exist){
-                                              store.record("hotSpot").update(db_handler.db, "user");
-                                             }else{
-                                                store.record("hotSpot").add(db_handler.db, "user");
-                                             }
+                            //                });
+                            //              });      
+                            //               Navigator.of(context).pop();
+                            //            },
+                            //          ),
+                            //          CupertinoDialogAction(
+                            //            child: Text("Allow user",style: TextStyle(color: Colors.red),),
+                            //            onPressed: (){
+                            //              setState(() {
+                            //               SettingsConfig.hotspot="user";
+                            //               store.record("hotSpot").exists(db_handler.db).then((exist){
+                            //                  if(exist){
+                            //                   store.record("hotSpot").update(db_handler.db, "user");
+                            //                  }else{
+                            //                     store.record("hotSpot").add(db_handler.db, "user");
+                            //                  }
                                              
-                                           });
-                                         });
-                                          Navigator.of(context).pop();
-                                       },
-                                     ),
-                                  ],
+                            //                });
+                            //              });
+                            //               Navigator.of(context).pop();
+                            //            },
+                            //          ),
+                            //       ],
 
-                                )
-                              );
-                            },
-                            ):Center(),
+                            //     )
+                            //   );
+                            // },
+                            // ):Center(),
                            (_controller.text.isEmpty || "bluetooth".startsWith(_controller.text.toLowerCase()))?ListTile(
                             leading: Icon(Icons.bluetooth,color: Colors.blueAccent),
                             title: Row(
@@ -662,74 +663,75 @@ class _SetUpState extends State<SetUp> {
                               );
                             },
                             ):Center(),
-                            (_controller.text.isEmpty || "camera".startsWith(_controller.text.toLowerCase()))?ListTile(
-                            leading: Icon(Icons.camera_alt,color: Colors.pinkAccent),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("Camera",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Text(SettingsConfig.camera!=null?SettingsConfig.camera:"",style: TextStyle(fontSize: 13,
-                                   color: SettingsConfig.camera=="Allow"?Colors.red:
-                                          SettingsConfig.camera=="Deny"?Colors.blue:
-                                          Colors.transparent
-                                
-                                ),),
-                              ],
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: (){
-                              showDialog(
-                                context: context,
-                                builder: (context)=>CupertinoAlertDialog(
 
-                                  title: Text("Camera"),
+                            // (_controller.text.isEmpty || "camera".startsWith(_controller.text.toLowerCase()))?ListTile(
+                            // leading: Icon(Icons.camera_alt,color: Colors.pinkAccent),
+                            // title: Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: <Widget>[
+                            //     Text("Camera",style: TextStyle(fontWeight: FontWeight.bold),),
+                            //     Text(SettingsConfig.camera!=null?SettingsConfig.camera:"",style: TextStyle(fontSize: 13,
+                            //        color: SettingsConfig.camera=="Allow"?Colors.red:
+                            //               SettingsConfig.camera=="Deny"?Colors.blue:
+                            //               Colors.transparent
+                                
+                            //     ),),
+                            //   ],
+                            // ),
+                            // trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            // onTap: (){
+                            //   showDialog(
+                            //     context: context,
+                            //     builder: (context)=>CupertinoAlertDialog(
+
+                            //       title: Text("Camera"),
                                   
                                  
-                                  actions: <Widget>[
-                                     CupertinoDialogAction(
-                                       child: Text("Deny"),
-                                       onPressed: (){
-                                         setState(() {
-                                            SettingsConfig.camera="Deny";
-                                             store.record("camera").exists(db_handler.db).then((exist){
-                                             if(exist){
-                                              store.record("camera").update(db_handler.db, "Deny");
-                                             }else{
-                                                store.record("camera").add(db_handler.db, "Deny");
-                                             }
+                            //       actions: <Widget>[
+                            //          CupertinoDialogAction(
+                            //            child: Text("Deny"),
+                            //            onPressed: (){
+                            //              setState(() {
+                            //                 SettingsConfig.camera="Deny";
+                            //                  store.record("camera").exists(db_handler.db).then((exist){
+                            //                  if(exist){
+                            //                   store.record("camera").update(db_handler.db, "Deny");
+                            //                  }else{
+                            //                     store.record("camera").add(db_handler.db, "Deny");
+                            //                  }
                                              
-                                           });
-                                         });
-                                          Navigator.of(context).pop();
-                                         }
+                            //                });
+                            //              });
+                            //               Navigator.of(context).pop();
+                            //              }
                                        
-                                     ),
+                            //          ),
                                     
-                                     CupertinoDialogAction(
-                                       child: Text("Allow",style: TextStyle(color: Colors.red),),
-                                       onPressed: (){
-                                         setState(() {
-                                           SettingsConfig.camera="Allow";
-                                           store.record("camera").exists(db_handler.db).then((exist){
-                                             if(exist){
-                                              store.record("camera").update(db_handler.db, "Allow");
-                                             }else{
-                                                store.record("camera").add(db_handler.db, "Allow");
-                                             }
+                            //          CupertinoDialogAction(
+                            //            child: Text("Allow",style: TextStyle(color: Colors.red),),
+                            //            onPressed: (){
+                            //              setState(() {
+                            //                SettingsConfig.camera="Allow";
+                            //                store.record("camera").exists(db_handler.db).then((exist){
+                            //                  if(exist){
+                            //                   store.record("camera").update(db_handler.db, "Allow");
+                            //                  }else{
+                            //                     store.record("camera").add(db_handler.db, "Allow");
+                            //                  }
                                              
-                                           });
+                            //                });
                                            
-                                         });
-                                          Navigator.of(context).pop();
-                                         }
-                                     ),
-                                  ],
+                            //              });
+                            //               Navigator.of(context).pop();
+                            //              }
+                            //          ),
+                            //       ],
 
-                                )
-                              );
-                            },
+                            //     )
+                            //   );
+                            // },
 
-                            ):Center(),
+                            // ):Center(),
                               
                         ],
                       ),
@@ -794,15 +796,15 @@ class _SetUpState extends State<SetUp> {
                          
                             
                             
-                           double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])>=6?(_controller.text.isEmpty || "permissions".startsWith(_controller.text.toLowerCase()))? ListTile(
-                            leading: Icon(Icons.bookmark,color: Colors.blueAccent),
-                            title: Text("Permissions",style: TextStyle(fontWeight: FontWeight.bold),),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: (){
-                              var route = CupertinoPageRoute(builder: (context)=>PermissionsPage());
-                              Navigator.push(context, route);
-                            },
-                            ):Center():Center(),
+                          // (_controller.text.isEmpty || "permissions".startsWith(_controller.text.toLowerCase()))? ListTile(
+                          //   leading: Icon(Icons.bookmark,color: Colors.blueAccent),
+                          //   title: Text("Permissions",style: TextStyle(fontWeight: FontWeight.bold),),
+                          //   trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                          //   onTap: (){
+                          //     var route = CupertinoPageRoute(builder: (context)=>PermissionsPage());
+                          //     Navigator.push(context, route);
+                          //   },
+                          //   ):Center(),
                            
                            (_controller.text.isEmpty || "kiosk password".startsWith(_controller.text.toLowerCase()))?ListTile(
                             leading: Icon(Icons.lock,color: Colors.red),
@@ -815,93 +817,94 @@ class _SetUpState extends State<SetUp> {
                       ),
                     ),
                   ),
-                   double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])<6? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Material(
+
+                  //  double.parse(SystemConfig.version?.split(" ")[1].split(".")[0])<6? Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Material(
                       
-                      borderRadius: BorderRadius.circular(20),
-                      child: Column(
-                        children: <Widget>[
-                           ListTile(
-                              leading: Icon(Icons.home,color: Colors.orange),
-                              title: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                   Text("Default Launcher",style: TextStyle(fontWeight: FontWeight.bold),),
+                  //     borderRadius: BorderRadius.circular(20),
+                  //     child: Column(
+                  //       children: <Widget>[
+                  //          ListTile(
+                  //             leading: Icon(Icons.home,color: Colors.orange),
+                  //             title: Row(
+                  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //               children: <Widget>[
+                  //                  Text("Default Launcher",style: TextStyle(fontWeight: FontWeight.bold),),
                                  
-                                ],
-                              ),
-                              trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                              onTap: (){
+                  //               ],
+                  //             ),
+                  //             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                  //             onTap: (){
 
-                                       PermissionsKiosk.isUsageSettings().then((_){
-                                          if(_){
-                                              PermissionsKiosk.setLauncher();
-                                          }else{
-                                            Scaffold.of(context).showSnackBar(
-                                              SnackBar(
-                                                action: SnackBarAction(label: "Enable",onPressed: (){
-                                                     PermissionsKiosk.getUsageSettings();  
-                                                },),
-                                                content:Row(
+                  //                      PermissionsKiosk.isUsageSettings().then((_){
+                  //                         if(_){
+                  //                             PermissionsKiosk.setLauncher();
+                  //                         }else{
+                  //                           Scaffold.of(context).showSnackBar(
+                  //                             SnackBar(
+                  //                               action: SnackBarAction(label: "Enable",onPressed: (){
+                  //                                    PermissionsKiosk.getUsageSettings();  
+                  //                               },),
+                  //                               content:Row(
                                                
-                                                children: <Widget>[
-                                                   Padding(
-                                                    padding: EdgeInsets.only(right: 10),
-                                                    child:  Icon(Icons.trip_origin,color: Colors.orange,),
-                                                  ),
-                                                  Text("Enable Usage Access",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
+                  //                               children: <Widget>[
+                  //                                  Padding(
+                  //                                   padding: EdgeInsets.only(right: 10),
+                  //                                   child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                  //                                 ),
+                  //                                 Text("Enable Usage Access",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
                                                   
-                                                ],),
+                  //                               ],),
                                                                                             
-                                                ));
+                  //                               ));
 
-                                          }
-                                        });
+                  //                         }
+                  //                       });
                                               
-                              },
-                              ),
+                  //             },
+                  //             ),
 
-                           (_controller.text.isEmpty || "disable usb bebugging".startsWith(_controller.text.toLowerCase()))? ListTile(
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            leading: Icon(Icons.usb,color: Colors.red,),
+                  //          (_controller.text.isEmpty || "disable usb bebugging".startsWith(_controller.text.toLowerCase()))? ListTile(
+                  //           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                  //           leading: Icon(Icons.usb,color: Colors.red,),
                             
-                            title:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
+                  //           title:Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
                                
-                              ],
-                            ),
-                            onTap: (){
-                                methodChannel.invokeMethod("OpenDev");
-                            },
-                            ):Center(),    
+                  //             ],
+                  //           ),
+                  //           onTap: (){
+                  //               methodChannel.invokeMethod("OpenDev");
+                  //           },
+                  //           ):Center(),    
 
-                          (_controller.text.isEmpty || "enable usage access".startsWith(_controller.text.toLowerCase()))?ListTile(
-                            leading: Icon(Icons.access_time,color: Colors.lightBlueAccent),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("Enable Usage Access",style: TextStyle(fontWeight: FontWeight.bold),),
+                  //         (_controller.text.isEmpty || "enable usage access".startsWith(_controller.text.toLowerCase()))?ListTile(
+                  //           leading: Icon(Icons.access_time,color: Colors.lightBlueAccent),
+                  //           title: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text("Enable Usage Access",style: TextStyle(fontWeight: FontWeight.bold),),
                                                            
-                              ],
-                            ),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            onTap: (){
+                  //             ],
+                  //           ),
+                  //           trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                  //           onTap: (){
                               
-                                     PermissionsKiosk.getUsageSettings(); 
+                  //                    PermissionsKiosk.getUsageSettings(); 
                                      
                              
-                            },
-                            ):Center()
+                  //           },
+                  //           ):Center()
                          
                             
                               
-                        ],
-                      ),
-                    ),
-                  ):Center()
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ):Center()
                   
          
               ]
