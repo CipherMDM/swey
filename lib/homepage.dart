@@ -110,10 +110,10 @@ class _HomeState extends State<Home> {
    
    db_handler.store.record("SetUp").exists(db_handler.db).then((bool isexit){
   
-           if(isexit){
-              setupdialog();
+           if(!isexit){
+             SystemConfig.isexist=false;
+              // setupdialog();
           }else{
-            
            db_handler.store.record("wifi").get(db_handler.db).then((st){
               SettingsConfig.wifi= st;
             });
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
 
            db_handler.store.record("Apps").get(db_handler.db).then((apps){
                 SystemConfig.appNames=apps;
-                for(int i=0;i<AllApps.apps.length;i++){
+                for(int i=0;i<AllApps.apps?.length;i++){
                   if(SystemConfig.appNames.contains(AllApps.apps[i].packageName)){
                     SystemConfig.apps.add(AllApps.apps[i]);
                   }
@@ -172,10 +172,10 @@ class _HomeState extends State<Home> {
         PermissionsKiosk.currentLauncher().then((_){
               loaded=true;
                methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames:[]});
-              if(_){
-               
-                    // methodChannel.invokeMethod("Activate");
+              if(_ && SystemConfig.isexist){
                 
+                    methodChannel.invokeMethod("Activate");
+                 
               }
               setState(() {
                 
@@ -222,8 +222,10 @@ class _HomeState extends State<Home> {
                     ) 
                 ),
                 ),
-            !loaded?Center(child: CircularProgressIndicator(),): Builder(
-              builder:(context)=> GestureDetector(
+            !loaded?SplashScreen(): (!SystemConfig.isexist)?SetUp(back:true):Builder(
+              builder:(context){
+               
+                return GestureDetector(
               child: Container(
                 height: MediaQuery.of(context).size.height,
                
@@ -351,7 +353,8 @@ class _HomeState extends State<Home> {
               
                 
               ),
-      ),
+      );
+              },
             ),
           ],
         ),
@@ -360,6 +363,16 @@ class _HomeState extends State<Home> {
   }
 }
 
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      child: Center(child: CircularProgressIndicator(),),
+    );
+  }
+}
 
 
 

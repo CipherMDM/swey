@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
+import 'package:swey/DataBase/db.dart';
 import 'package:swey/systemconfig.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
@@ -57,12 +57,12 @@ class _PermissionsState extends State<PermissionsPage> {
 
     await PermissionsKiosk.currentLauncher().then((islan){
                                                   if(islan){
-                                              if(mounted)      
+                                                
                                                setState(() {
                                                  laun = Colors.green;
                                                });
                                            }else{
-                                             if(mounted)      
+                                           
                                                 setState(() {
                                                  laun = Colors.transparent;
                                                });
@@ -70,13 +70,13 @@ class _PermissionsState extends State<PermissionsPage> {
                            });
     await PermissionsKiosk.isUsageSettings().then((isus){
                                              if(isus){
-                                              if(mounted)       
+                                             
                                                setState(() {
                                                  usage = Colors.green;
                                                  isusage = true;
                                                });
                                            }else{
-                                             if(mounted)      
+                                          
                                                 setState(() {
                                                  usage = Colors.transparent;
                                                  isusage = false;
@@ -85,13 +85,13 @@ class _PermissionsState extends State<PermissionsPage> {
                            });     
     await PermissionsKiosk.isDrawSettings().then((isdr){
                                                   if(isdr){
-                                            if(mounted)            
+                                       
                                                setState(() {
                                                  draw = Colors.green;
                                                  isdraw = true;
                                                });
                                            }else{
-                                             if(mounted)      
+                                             
                                                 setState(() {
                                                  draw = Colors.transparent;
                                                   isdraw = false;
@@ -100,14 +100,14 @@ class _PermissionsState extends State<PermissionsPage> {
                            });      
     await PermissionsKiosk.isWriteSettings().then((iswr){
                                                   if(iswr){
-                                              if(mounted)      
+                                               
 
                                                setState(() {
                                                  write = Colors.green;
                                                   iswrite = true;
                                                });
                                            }else{
-                                              if(mounted)      
+                                            
 
                                                 setState(() {
                                                   write = Colors.transparent;
@@ -120,6 +120,7 @@ class _PermissionsState extends State<PermissionsPage> {
      
       if(!_){
          usb = Colors.green;
+         isusb=true;
         
       }
     });
@@ -237,88 +238,25 @@ class _PermissionsState extends State<PermissionsPage> {
                       borderRadius: BorderRadius.circular(20),
                       child: Column(
                         children: <Widget>[
-                          
+
                            ListTile(
-                            leading: Icon(Icons.home,color: Colors.blueAccent),
-                            title: Row(
+                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            leading: Icon(Icons.usb,color: Colors.red,),
+                            
+                            title:Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                 Text("Default Launcher",style: TextStyle(fontWeight: FontWeight.bold),),
-                                 Icon(CupertinoIcons.check_mark_circled_solid,color: laun,)
-                              
+                                Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
+                                Icon(CupertinoIcons.check_mark_circled_solid,color: usb,)
                                
-                                
                               ],
                             ),
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
                             onTap: (){
-                                      if(!isusage){
-                                         
-                                          Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                              action: SnackBarAction(label: "Enable",onPressed: (){
-                                                   PermissionsKiosk.getUsageSettings();  
-                                              },),
-                                              content:Row(
-                                             
-                                              children: <Widget>[
-                                                 Padding(
-                                                  padding: EdgeInsets.only(right: 10),
-                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
-                                                ),
-                                                Text("Enable Usage Access",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
-                                                
-                                              ],),
-                                                                                          
-                                              ));
-
-                                      }else if(!isdraw){
-                                         
-                                          Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                              action: SnackBarAction(label: "Enable",onPressed: (){
-                                                   PermissionsKiosk.getDrawSettings();  
-                                              },),
-                                              content:Row(
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: EdgeInsets.only(right: 10),
-                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
-                                                ),
-                                                Text("Enable Overlay Permissions",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
-                                                
-                                              ],),
-                                                                                          
-                                              ));
-
-                                      }else if(!iswrite){
-                                         
-                                          Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                              action: SnackBarAction(label: "Enable",onPressed: (){
-                                                   PermissionsKiosk.getWriteSettings();  
-                                              },),
-                                              content:Row(
-                                              children: <Widget>[
-                                                 Padding(
-                                                  padding: EdgeInsets.only(right: 10),
-                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
-                                                ),
-                                                Text("Enable Write Settings",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
-                                                
-                                              ],),
-                                                                                          
-                                              ));
-
-                                      }else{
-                                        PermissionsKiosk.setLauncher();
-                                      }
-
-                                          
-                            
-                                 
+                                methodChannel.invokeMethod("OpenDev");
                             },
                             ),
+                          
+                          
                            ListTile(
                             leading: Icon(Icons.access_time,color: Colors.lightBlueAccent),
                             title: Row(
@@ -407,30 +345,121 @@ class _PermissionsState extends State<PermissionsPage> {
                       borderRadius: BorderRadius.circular(20),
                       child: Column(
                         children: <Widget>[
-                          ListTile(
-                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
-                            leading: Icon(Icons.usb,color: Colors.red,),
-                            
-                            title:Row(
+                           ListTile(
+                            leading: Icon(Icons.home,color: Colors.blueAccent),
+                            title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
-                                Icon(CupertinoIcons.check_mark_circled_solid,color: usb,)
+                                 Text("Default Launcher",style: TextStyle(fontWeight: FontWeight.bold),),
+                                //  Icon(CupertinoIcons.check_mark_circled_solid,color: laun,)
+                              
                                
+                                
                               ],
                             ),
-                            onTap: (){
-                                methodChannel.invokeMethod("OpenDev");
-                            },
-                            ),
-                          ListTile(
-                            leading: Icon(Icons.person,color: Colors.deepPurple,),
-                            title: Text("Activate Device Admin",style: TextStyle(fontWeight: FontWeight.bold),),
                             trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
                             onTap: (){
-                              
+                                      if(!isusage){
+                                         
+                                          Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getUsageSettings();  
+                                              },),
+                                              content:Row(
+                                             
+                                              children: <Widget>[
+                                                 Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
+                                                Text("Enable Usage Access",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
+                                                
+                                              ],),
+                                                                                          
+                                              ));
+
+                                      }
+                                      else if(!isusb){
+                                         
+                                          Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                              action: SnackBarAction(label: "Disable",onPressed: (){
+                                                   methodChannel.invokeMethod("OpenDev");
+                                              },),
+                                              content:Row(
+                                             
+                                              children: <Widget>[
+                                                 Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
+                                                Text("Disable Usb Debugging",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
+                                                
+                                              ],),
+                                                                                          
+                                              ));
+
+                                      }
+                                      else if(!isdraw){
+                                         
+                                          Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getDrawSettings();  
+                                              },),
+                                              content:Row(
+                                              children: <Widget>[
+                                                Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
+                                                Text("Enable Overlay Permissions",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
+                                                
+                                              ],),
+                                                                                          
+                                              ));
+
+                                      }else if(!iswrite){
+                                         
+                                          Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                              action: SnackBarAction(label: "Enable",onPressed: (){
+                                                   PermissionsKiosk.getWriteSettings();  
+                                              },),
+                                              content:Row(
+                                              children: <Widget>[
+                                                 Padding(
+                                                  padding: EdgeInsets.only(right: 10),
+                                                  child:  Icon(Icons.trip_origin,color: Colors.orange,),
+                                                ),
+                                                Text("Enable Write Settings",style: TextStyle(color: Colors.orange,fontWeight: FontWeight.bold),)
+                                                
+                                              ],),
+                                                                                          
+                                              ));
+
+                                      }else{
+                                         db_handler.store.record("SetUp").add(db_handler.db, true).then((_){
+                                             PermissionsKiosk.setLauncher();
+                                         });
+                                         
+                                      }
+
+                                          
+                            
+                                 
                             },
                             ),
+                         
+                          // ListTile(
+                          //   leading: Icon(Icons.person,color: Colors.deepPurple,),
+                          //   title: Text("Activate Device Admin",style: TextStyle(fontWeight: FontWeight.bold),),
+                          //   trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                          //   onTap: (){
+                              
+                          //   },
+                          //   ),
                           
                             
                               

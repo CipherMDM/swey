@@ -10,6 +10,8 @@ import 'package:sembast/sembast.dart';
 import 'DataBase/db.dart';
 
 class SetUp extends StatefulWidget {
+  bool back;
+  SetUp({this.back});
   @override
   _SetUpState createState() => _SetUpState();
 }
@@ -54,7 +56,7 @@ class _SetUpState extends State<SetUp> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},),
+        leading: widget.back==null? IconButton(icon: Icon(Icons.arrow_back_ios,size: 20,color: Colors.black,),onPressed: (){Navigator.of(context).pop();},):Center(),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.highlight_off,color: Colors.red,),onPressed: (){
              methodChannel.invokeMethod("Deactivate").then((_){

@@ -110,6 +110,10 @@ public class MainActivity extends FlutterActivity{
             else if (call.method.equals("OpenSettings")) {
               startActivity(new Intent(Settings.ACTION_SETTINGS));
             }   
+            else if (call.method.equals("Launcher")) {
+                  startActivity(new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+  
+            }
 
             //kiosk set up
 
@@ -127,7 +131,10 @@ public class MainActivity extends FlutterActivity{
                  stopService(myService);
                
             
-            }  
+            } 
+              
+
+            
 
             else if (call.method.equals("LoadApps")) {
               List<String> _apps = call.argument("Apps");
