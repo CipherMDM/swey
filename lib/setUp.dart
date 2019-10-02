@@ -860,6 +860,22 @@ class _SetUpState extends State<SetUp> {
                               },
                               ),
 
+                           (_controller.text.isEmpty || "disable usb bebugging".startsWith(_controller.text.toLowerCase()))? ListTile(
+                            trailing: Icon(Icons.arrow_forward_ios,color: Colors.black,size: 15,),
+                            leading: Icon(Icons.usb,color: Colors.red,),
+                            
+                            title:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text("Disable Usb Debugging",style: TextStyle(fontWeight: FontWeight.bold),),
+                               
+                              ],
+                            ),
+                            onTap: (){
+                                methodChannel.invokeMethod("OpenDev");
+                            },
+                            ):Center(),    
+
                           (_controller.text.isEmpty || "enable usage access".startsWith(_controller.text.toLowerCase()))?ListTile(
                             leading: Icon(Icons.access_time,color: Colors.lightBlueAccent),
                             title: Row(

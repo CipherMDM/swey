@@ -134,6 +134,8 @@ public class MainActivity extends FlutterActivity{
               for(int i=0;i<_apps.size();i++){
                 AllowedApps.Apps.add(_apps.get(i));
               }
+
+              result.success(true);
              
             }
               

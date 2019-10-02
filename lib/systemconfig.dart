@@ -8,6 +8,7 @@ class SystemConfig{
   static String version;
   static bool appdraw = false;
   static List<String> allsettings = [];
+  static bool isexist = true;
 
   SystemConfig.form(List<Apps> apps,List<String> appName,Map<String,String> settings){
            SystemConfig.apps=apps;

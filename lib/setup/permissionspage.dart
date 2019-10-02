@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:permissions_kiosk/permissions_kiosk.dart';
+import 'package:swey/systemconfig.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 
@@ -56,10 +57,12 @@ class _PermissionsState extends State<PermissionsPage> {
 
     await PermissionsKiosk.currentLauncher().then((islan){
                                                   if(islan){
+                                              if(mounted)      
                                                setState(() {
                                                  laun = Colors.green;
                                                });
                                            }else{
+                                             if(mounted)      
                                                 setState(() {
                                                  laun = Colors.transparent;
                                                });
@@ -67,11 +70,13 @@ class _PermissionsState extends State<PermissionsPage> {
                            });
     await PermissionsKiosk.isUsageSettings().then((isus){
                                              if(isus){
+                                              if(mounted)       
                                                setState(() {
                                                  usage = Colors.green;
                                                  isusage = true;
                                                });
                                            }else{
+                                             if(mounted)      
                                                 setState(() {
                                                  usage = Colors.transparent;
                                                  isusage = false;
@@ -80,11 +85,13 @@ class _PermissionsState extends State<PermissionsPage> {
                            });     
     await PermissionsKiosk.isDrawSettings().then((isdr){
                                                   if(isdr){
+                                            if(mounted)            
                                                setState(() {
                                                  draw = Colors.green;
                                                  isdraw = true;
                                                });
                                            }else{
+                                             if(mounted)      
                                                 setState(() {
                                                  draw = Colors.transparent;
                                                   isdraw = false;
@@ -93,11 +100,15 @@ class _PermissionsState extends State<PermissionsPage> {
                            });      
     await PermissionsKiosk.isWriteSettings().then((iswr){
                                                   if(iswr){
+                                              if(mounted)      
+
                                                setState(() {
                                                  write = Colors.green;
                                                   iswrite = true;
                                                });
                                            }else{
+                                              if(mounted)      
+
                                                 setState(() {
                                                   write = Colors.transparent;
                                                   iswrite = false;
@@ -150,7 +161,8 @@ class _PermissionsState extends State<PermissionsPage> {
   void initState() {
     initSettings();
     super.initState();
-    t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted?initSettings():null);
+    if(!SystemConfig.isexist)
+         t =  Timer.periodic(Duration(seconds: 1), (_)=> mounted?initSettings():null);
    
   }
 
