@@ -11,10 +11,8 @@ import android.widget.Toast;;
 public class BootCompletedIntentReceiver extends BroadcastReceiver {
  @Override
  public void onReceive(Context context, Intent intent) {
-  if ("android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
-    Toast.makeText(context, "Kiosk activated by boot!", Toast.LENGTH_LONG).show();
+     Toast.makeText(context, "Kiosk activated by boot!", Toast.LENGTH_LONG).show();
      Intent intent2 = new Intent(context, BackgroundService.class);
      context.startService(intent2);
-  }
  }
 }

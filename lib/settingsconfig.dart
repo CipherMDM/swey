@@ -1,13 +1,11 @@
 
 class SettingsConfig{
-
-  static String wifi="";
-  static String hotspot="";
-  static String bluetooth="";
-  static String aeroplane_mode="";
-  static String mobile_data="";
-  static String sound="";
-  static String camera="";
-  static String display="";
-
+  static String wifi="user";
+  static String hotspot="user";
+  static String bluetooth="user";
+  static String aeroplane_mode="user";
+  static String mobile_data="user";
+  static String sound="Allow";
+  static String camera="Allow";
+  static String display="Allow";
 }

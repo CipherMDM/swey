@@ -55,12 +55,13 @@ public class BackgroundService extends Service {
 
     @Override
     public void onCreate() {
-        Toast.makeText(this, "Kiosk activated!", Toast.LENGTH_LONG).show();
+        
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {            
               
                 if(!AllowedApps.Apps.contains(getForegroundApp())){
+                    Toast.makeText(context, getForegroundApp()+" blocked by swey", Toast.LENGTH_LONG).show();
                     showHomeScreen();
                   }
                 handler.postDelayed(runnable, 1000);
@@ -78,7 +79,7 @@ public class BackgroundService extends Service {
     @Override
     public void onStart(Intent intent, int startid) {
         onCreate();
-        Toast.makeText(this, "Kiosk activated!", Toast.LENGTH_LONG).show();
+     
     }
 
 
@@ -109,14 +110,11 @@ public class BackgroundService extends Service {
     }
     
     public boolean showHomeScreen(){
+        
         Intent startMain = new Intent(Intent.ACTION_MAIN);
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
-
-        // Intent lockIntent = new Intent(context, MainActivity.class);
-        // lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        // context.startActivity(lockIntent);
         return true;
     }
 

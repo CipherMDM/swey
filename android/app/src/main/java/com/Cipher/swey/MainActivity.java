@@ -1,6 +1,6 @@
 package com.Cipher.swey;
 
-import android.os.Bundle;
+
 import io.flutter.app.FlutterActivity;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 import android.view.View;
@@ -111,7 +111,8 @@ public class MainActivity extends FlutterActivity{
               startActivity(new Intent(Settings.ACTION_SETTINGS));
             }   
             else if (call.method.equals("Launcher")) {
-                  startActivity(new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+                  // startActivity(new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS));
+                 
   
             }
 
@@ -120,20 +121,18 @@ public class MainActivity extends FlutterActivity{
             else if (call.method.equals("Activate")) {
 
                  Intent intent = new Intent(context, BackgroundService.class);
+                 Intent myService = new Intent(context, BootCompletedIntentReceiver.class);
+                 startService(myService);
                  startService(intent);
-
-                 Intent intent2 = new Intent(context, BackgroundService.class);
-                 startService(intent2);
-               
             
             }  
 
             else if (call.method.equals("Deactivate")) {
-
+                 Intent intent = new Intent(context, BackgroundService.class);
                  Intent myService = new Intent(context, BootCompletedIntentReceiver.class);
                  stopService(myService);
-               
-            
+                 stopService(intent);
+                          
             } 
               
 
@@ -156,11 +155,10 @@ public class MainActivity extends FlutterActivity{
                     // debugging enabled 
                      result.success(true);
                 } else {
-                    //;debugging does not enabled
+                    //debugging does not enabled
                      result.success(false);
                 }
-              
-             
+                         
             }
 
  
@@ -168,15 +166,89 @@ public class MainActivity extends FlutterActivity{
                startActivity(new Intent(android.provider.Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS));
               
             }  
-
-           
-
+            else if (call.method.equals("isWriteSettings")) {
+             boolean settingsCanWrite = Settings.System.canWrite(context);
+             result.success(settingsCanWrite);
+           }else if (call.method.equals("getWriteSettings")) {
+                 Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS, Uri.parse("package:" + context.getPackageName()));
+               startActivityForResult(intent, 200);
+           }else if (call.method.equals("isUsageSettings")) {
+                  AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+                  int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,android.os.Process.myUid(), context.getPackageName());
+                  boolean granted;
+                  if (mode == AppOpsManager.MODE_DEFAULT) {
+                    granted = (context.checkCallingOrSelfPermission(android.Manifest.permission.PACKAGE_USAGE_STATS) == PackageManager.PERMISSION_GRANTED);
+                  } else {
+                    granted = (mode == AppOpsManager.MODE_ALLOWED);
+                  }
+                  result.success(granted);
+                  
+           }else if (call.method.equals("getUsageSettings")) {
+                
+             startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+             
+           }else if (call.method.equals("isDrawSettings")) {
+                result.success(Settings.canDrawOverlays(context));
+           }else if (call.method.equals("getDrawSettings")) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+                startActivityForResult(intent, 0);
+           }else if (call.method.equals("currentLauncher")) {
+             result.success(isMyAppLauncherDefault());
+                 
+        
+           }else if (call.method.equals("setLauncher")) { 
+             context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
+             resetPreferredLauncherAndOpenChooser(context);
+       
+             // context.startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+       
+             // Intent intent = new Intent("android.intent.action.MAIN");
+             // intent.addCategory("android.intent.category.HOME");
+             // intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+             // context.startActivity(intent);
+             
+           }
+       
 
         }  
     });
 
     
   }
+
+  private boolean isMyAppLauncherDefault() {
+     final IntentFilter filter = new IntentFilter(Intent.ACTION_MAIN);
+     filter.addCategory(Intent.CATEGORY_HOME);
+   
+     List<IntentFilter> filters = new ArrayList<IntentFilter>();
+     filters.add(filter);
+   
+     final String myPackageName = context.getPackageName();
+     List<ComponentName> activities = new ArrayList<ComponentName>();
+     final PackageManager packageManager = (PackageManager) context.getPackageManager();
+   
+     packageManager.getPreferredActivities(filters, activities, null);
+   
+     for (ComponentName activity : activities) {
+         if (myPackageName.equals(activity.getPackageName())) {
+             return true;
+         }
+     }
+     return false;
+ }   
+
+ public static void resetPreferredLauncherAndOpenChooser(Context context) {
+  PackageManager packageManager = context.getPackageManager();
+  ComponentName componentName = new ComponentName(context, context.getClass());
+  packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+  Intent selector = new Intent(Intent.ACTION_MAIN);
+  selector.addCategory(Intent.CATEGORY_HOME);
+  selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+  context.startActivity(selector);
+
+  packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+ }
 
 
 
@@ -187,7 +259,6 @@ public class MainActivity extends FlutterActivity{
       {
         Intent closeDialog=new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         sendBroadcast(closeDialog);
-       
        
       }
   }
@@ -209,13 +280,6 @@ public class MainActivity extends FlutterActivity{
    view.SYSTEM_UI_FLAG_FULLSCREEN | view.SYSTEM_UI_FLAG_HIDE_NAVIGATION   | 
    view.SYSTEM_UI_FLAG_LAYOUT_STABLE | view.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | view.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);               
   }
-
-
-  
-
-
-
-  
 
   
 }

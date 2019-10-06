@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:permissions_kiosk/permissions_kiosk.dart';
 import 'package:sembast/sembast.dart';
 import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
@@ -93,11 +92,9 @@ class _HomeState extends State<Home> {
         
       }
 
-      PermissionsKiosk.platformVersion.then((data){
-        SystemConfig.version=data;
+     
         AllApps.form(__apps, null);
-      });
-
+      
        
       
       
@@ -139,6 +136,10 @@ class _HomeState extends State<Home> {
            db_handler.store.record("Display").get(db_handler.db).then((st){
               SettingsConfig.display= st;
             }); 
+
+           db_handler.store.record("Password").get(db_handler.db).then((st){
+              SystemConfig.password = st;
+            }); 
            
 
            db_handler.store.record("Apps").get(db_handler.db).then((apps){
@@ -150,8 +151,6 @@ class _HomeState extends State<Home> {
 
                 }
 
-                loaded=true;
-             
 
            });
 
@@ -174,9 +173,9 @@ class _HomeState extends State<Home> {
            
          
     });
-    Timer(Duration(seconds: 5),(){setState(() {
+    Timer(Duration(seconds: 4),(){setState(() {
               loaded=true;
-              methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","android"]:["android","com.Cipher.swey","com.android.systemui"]});
+              methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames!=null?SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","com.android.incallui","android"]:["android","com.android.incallui","com.Cipher.swey","com.android.systemui"]});
               if(SystemConfig.isexist){
                 methodChannel.invokeMethod("Activate");         
               }
@@ -221,6 +220,10 @@ class _HomeState extends State<Home> {
                 ),
             !loaded?SplashScreen():(!SystemConfig.isexist)?PermissionsPage(back:true):Builder(
               builder:(context){
+
+                if(SystemConfig.isexist){
+                      methodChannel.invokeMethod("Activate");         
+                 }
                
                 return GestureDetector(
               child: Container(
@@ -366,7 +369,21 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.black,
-      child: Center(child: CircularProgressIndicator(),),
+      child: Center(
+        child: ListTile(
+          
+          title: Center(
+            child: ListTile(
+              title: Center(
+                child: RichText(text: TextSpan(
+                  text: "Swey",
+                  style: TextStyle(fontSize: 30,color: Colors.white.withOpacity(0.5))
+                ),),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

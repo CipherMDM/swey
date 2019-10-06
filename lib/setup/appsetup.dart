@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,9 +57,8 @@ class _AppSetUpState extends State<AppSetUp> {
                                 child:Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    CheckBox(AllApps.apps[i]),
-                                    Center(child: Text(AllApps.apps[i].appNmae.toString().split(" ")[0].split("_")[0]))
-                                    
+                                    CheckBox(AllApps.apps[i],img:AllApps.apps[i].appIcon ,),
+                                    Center(child: Text(AllApps.apps[i].appNmae.toString().length>8?AllApps.apps[i].appNmae.toString().substring(0,8)+"..":AllApps.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()))                               
                                   ],
                                 ) 
                               ),
@@ -68,7 +69,34 @@ class _AppSetUpState extends State<AppSetUp> {
                           
                         );
                          }),
-                 ): Center()
+                 ): GridView.count(
+                       
+                        crossAxisCount: 4,
+                        children: List.generate(temp.length, (i) {
+                          return Container(
+                          height: 105,
+                          
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: GestureDetector(
+                              onTap: (){},
+                              child: Center(
+                                child:Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    CheckBox(temp[i],img: temp[i].appIcon,),
+                                    Center(child: Text(temp[i].appNmae.toString().length>8?temp[i].appNmae.toString().substring(0,8)+"..":temp.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList()[i].appNmae.toString()))                               
+                                  ],
+                                ) 
+                              ),
+                            )
+                            
+                           
+                          ),
+                          
+                        );
+                         }),
+                 )
             ),
              Padding(
                 padding: const EdgeInsets.only(top:18.0,left: 10,right: 10),
@@ -77,10 +105,16 @@ class _AppSetUpState extends State<AppSetUp> {
                  child: TextField(
                   controller: _controller,
                   onChanged: (text){
-                        setState(() {
                           temp = AllApps.apps.where((apps)=>apps.appNmae.toLowerCase().startsWith(_controller.text.toLowerCase())).toList();
+                        
+
+                           setState(() {
+                         
                           
-                        });
+                           });
+                           
+                      
+                        
                   },
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(top:16,bottom: 8,right: 10,left: 14),
@@ -103,7 +137,8 @@ class _AppSetUpState extends State<AppSetUp> {
 
 class CheckBox extends StatefulWidget {
   Apps i;
-  CheckBox(this.i);
+  Image img;
+  CheckBox(this.i,{this.img});
   @override
   _CheckBoxState createState() => _CheckBoxState(i);
 }
@@ -148,13 +183,13 @@ class _CheckBoxState extends State<CheckBox> {
                                added=false;
                          }
                          db_handler.store.record("Apps").update(db_handler.db, SystemConfig.appNames);
-                         methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","android"]});
+                         methodChannel.invokeMethod("LoadApps",{"Apps":SystemConfig.appNames+["com.Cipher.swey","com.android.systemui","android","com.android.incallui",]});
                      });
       },
       child: CircleAvatar(
           
           backgroundColor: Colors.transparent,
-          backgroundImage: i.appIcon.image,
+          backgroundImage: widget.img.image,
           radius: 28,
           child: Padding(
                      padding: EdgeInsets.only(top:35,left: 35),

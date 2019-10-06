@@ -9,6 +9,7 @@ class SystemConfig{
   static bool appdraw = false;
   static List<String> allsettings = [];
   static bool isexist = true;
+  static String password = "";
 
   SystemConfig.form(List<Apps> apps,List<String> appName,Map<String,String> settings){
            SystemConfig.apps=apps;
@@ -25,3 +26,4 @@ class Apps{
    Image appIcon;
    Apps({this.appIcon,this.packageName,this.appNmae});
 }
+
