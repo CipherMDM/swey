@@ -197,10 +197,10 @@ public class MainActivity extends FlutterActivity{
                  
         
            }else if (call.method.equals("setLauncher")) { 
-             context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
-             resetPreferredLauncherAndOpenChooser(context);
+            //  context.getPackageManager().clearPackagePreferredActivities(context.getPackageName());
+            //  resetPreferredLauncherAndOpenChooser(context);
        
-             // context.startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
+             context.startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
        
              // Intent intent = new Intent("android.intent.action.MAIN");
              // intent.addCategory("android.intent.category.HOME");
