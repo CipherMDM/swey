@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:launcher_assist/launcher_assist.dart';
 import 'package:sembast/sembast.dart';
 import 'package:swey/DataBase/db.dart';
 import 'package:swey/allapps.dart';
@@ -10,7 +11,6 @@ import 'package:swey/setup/permissionspage.dart';
 import 'package:swey/systemconfig.dart';
 import 'DataBase/AppDatabase.dart';
 import 'setUp.dart';
-import 'package:device_apps/device_apps.dart';
 import 'package:flutter/cupertino.dart';
 
 class Home extends StatefulWidget {
@@ -76,10 +76,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<List> _getApps() async {
-    List apps = await DeviceApps.getInstalledApplications(
-        onlyAppsWithLaunchIntent: true,
-        includeSystemApps: true,
-        includeAppIcons: true);
+    List apps = await LauncherAssist.getAllApps();
     return apps;
   }
 
@@ -93,19 +90,19 @@ class _HomeState extends State<Home> {
 
       for (int i = 0; i < apps.length; i++) {
         db_handler.store.record("Apps").get(db_handler.db).then((allowapps) {
-          if (allowapps.contains(apps[i].packageName)) {
-            SystemConfig.appNames.add(apps[i].packageName);
+          if (allowapps.contains(apps[i]["label"])) {
+            SystemConfig.appNames.add(apps[i]["package"]);
             SystemConfig.apps.add(Apps(
-                appIcon: Image.memory(apps[i].icon),
-                appNmae: apps[i].appName,
-                packageName: apps[i].packageName));
+                appIcon: Image.memory(apps[i]["icon"]),
+                appNmae: apps[i]["label"],
+                packageName: apps[i]["package"]));
           }
         });
 
         __apps.add(Apps(
-            appIcon: Image.memory(apps[i].icon),
-            appNmae: apps[i].appName,
-            packageName: apps[i].packageName));
+            appIcon: Image.memory(apps[i]["icon"]),
+            appNmae: apps[i]["label"],
+            packageName: apps[i]["package"]));
       }
 
       AllApps.form(__apps, null);
@@ -152,6 +149,7 @@ class _HomeState extends State<Home> {
 
         db_handler.store.record("Apps").get(db_handler.db).then((apps) {
           SystemConfig.appNames = apps;
+
           for (int i = 0; i < AllApps.apps?.length; i++) {
             if (SystemConfig.appNames.contains(AllApps.apps[i].packageName)) {
               SystemConfig.apps.add(AllApps.apps[i]);
@@ -188,7 +186,7 @@ class _HomeState extends State<Home> {
                   "com.Cipher.swey",
                   "com.android.systemui"
                 ],
-          "Notify":SettingsConfig.notification_panel      
+          "Notify": SettingsConfig.notification_panel
         });
         if (SystemConfig.isexist) {
           methodChannel.invokeMethod("Activate");
@@ -248,6 +246,7 @@ class _HomeState extends State<Home> {
                                           padding: const EdgeInsets.only(
                                               top: 0, bottom: 10),
                                           child: GridView.count(
+                                              physics: BouncingScrollPhysics(),
                                               crossAxisCount: 4,
                                               children: _controller.text.isEmpty
                                                   ? List.generate(
@@ -258,10 +257,12 @@ class _HomeState extends State<Home> {
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              DeviceApps.openApp(
-                                                                  SystemConfig
-                                                                      .apps[i]
-                                                                      .packageName);
+                                                              LauncherAssist
+                                                                  .launchApp(
+                                                                      SystemConfig
+                                                                          .apps[
+                                                                              i]
+                                                                          .packageName);
                                                             },
                                                             child: Center(
                                                                 child: Column(
@@ -312,7 +313,7 @@ class _HomeState extends State<Home> {
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              DeviceApps.openApp(SystemConfig
+                                                              LauncherAssist.launchApp(SystemConfig
                                                                   .apps
                                                                   .where((apps) => apps
                                                                       .appNmae

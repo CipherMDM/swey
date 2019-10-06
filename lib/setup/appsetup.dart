@@ -44,6 +44,7 @@ class _AppSetUpState extends State<AppSetUp> {
                       // horizontal, this produces 2 rows.
 
                       crossAxisCount: 4,
+                      physics: BouncingScrollPhysics(),
                       // Generate 100 widgets that display their index in the List.
                       children: List.generate(AllApps.apps.length, (i) {
                         return Container(
@@ -84,6 +85,7 @@ class _AppSetUpState extends State<AppSetUp> {
                       }),
                     )
                   : GridView.count(
+                      physics: BouncingScrollPhysics(),
                       crossAxisCount: 4,
                       children: List.generate(temp.length, (i) {
                         return Container(
@@ -193,6 +195,7 @@ class _CheckBoxState extends State<CheckBox> {
     return GestureDetector(
       onTap: () {
         setState(() {
+          print(i.packageName);
           if (!added) {
             color = Colors.red.withOpacity(0.8);
             added = true;
