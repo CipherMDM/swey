@@ -59,9 +59,14 @@ public class BackgroundService extends Service {
         handler = new Handler();
         runnable = new Runnable() {
             public void run() {            
-              
-                if(!AllowedApps.Apps.contains(getForegroundApp())){
-                    Toast.makeText(context, getForegroundApp()+" blocked by swey", Toast.LENGTH_LONG).show();
+                String recent = "";
+                String current = getForegroundApp();
+                if(!AllowedApps.Apps.contains(current)){
+                //   if(current!=recent && current!="com.android.settings"){
+                //        Toast.makeText(context, current+" blocked by swey", Toast.LENGTH_LONG).show();
+                //        recent=current;
+                //   }
+                   
                     showHomeScreen();
                   }
                 handler.postDelayed(runnable, 1000);

@@ -7,4 +7,5 @@ class SettingsConfig {
   static String sound = "Allow";
   static String camera = "Allow";
   static String display = "Allow";
+  static String notification_panel = "Allow";
 }

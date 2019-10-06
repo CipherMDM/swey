@@ -136,6 +136,9 @@ class _HomeState extends State<Home> {
         db_handler.store.record("sound").get(db_handler.db).then((st) {
           SettingsConfig.sound = st == null ? "Allow" : st;
         });
+        db_handler.store.record("notify").get(db_handler.db).then((st) {
+          SettingsConfig.notification_panel = st == null ? "Allow" : st;
+        });
         //  db_handler.store.record("camera").get(db_handler.db).then((st){
         //     SettingsConfig.camera= st;
         //   });
@@ -184,7 +187,8 @@ class _HomeState extends State<Home> {
                   "com.android.incallui",
                   "com.Cipher.swey",
                   "com.android.systemui"
-                ]
+                ],
+          "Notify":SettingsConfig.notification_panel      
         });
         if (SystemConfig.isexist) {
           methodChannel.invokeMethod("Activate");

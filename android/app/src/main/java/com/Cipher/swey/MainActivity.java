@@ -19,6 +19,10 @@ import android.content.Context;
 import android.os.StrictMode;
 import android.os.StrictMode.VmPolicy.Builder;
 import android.provider.Settings;
+import 	android.view.ViewGroup;
+import android.view.MotionEvent;
+import android.view.Gravity;
+import android.graphics.PixelFormat;
 
 
 //premissions plugin
@@ -52,9 +56,9 @@ public class MainActivity extends FlutterActivity{
 
   private static final String CHANNEL = "com.Cipher";
   private static  FlutterView flutterView;
-  boolean currentFocus;
+  boolean currentFocus=false;
   Context context=this;
-  boolean isPaused;  
+  boolean isPaused=false;  
   Handler collapseNotificationHandler;
   Handler collapsePowerButtonHandler;
 
@@ -64,20 +68,7 @@ public class MainActivity extends FlutterActivity{
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     
-    if (BuildConfig.DEBUG) {
 
-      StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
-                  .detectAll()
-                  .penaltyLog()
-                  .build();
-      StrictMode.setVmPolicy(policy);
-
-      StrictMode.ThreadPolicy policy2 = new StrictMode.ThreadPolicy.Builder()
-           .detectAll()
-           .penaltyLog()
-           .build();
-       StrictMode.setThreadPolicy(policy2);
-  }
     flutterView=getFlutterView();
     hideSystemUI(flutterView);
     GeneratedPluginRegistrant.registerWith(this);
@@ -121,8 +112,6 @@ public class MainActivity extends FlutterActivity{
             else if (call.method.equals("Activate")) {
 
                  Intent intent = new Intent(context, BackgroundService.class);
-                 Intent myService = new Intent(context, BootCompletedIntentReceiver.class);
-                 startService(myService);
                  startService(intent);
             
             }  
@@ -143,6 +132,10 @@ public class MainActivity extends FlutterActivity{
               AllowedApps.Apps.clear();
               for(int i=0;i<_apps.size();i++){
                 AllowedApps.Apps.add(_apps.get(i));
+              }
+              AllowedApps.Notification_panel = call.argument("Notify");
+              if(AllowedApps.Notification_panel=="Allow"){
+
               }
 
               result.success(true);
@@ -259,7 +252,6 @@ public class MainActivity extends FlutterActivity{
       {
         Intent closeDialog=new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         sendBroadcast(closeDialog);
-       
       }
   }
 
@@ -268,6 +260,9 @@ public class MainActivity extends FlutterActivity{
   public void onBackPressed() {
       return;
   }
+
+
+
 
 
   private void hideSystemUI(View view) {
@@ -280,6 +275,9 @@ public class MainActivity extends FlutterActivity{
    view.SYSTEM_UI_FLAG_FULLSCREEN | view.SYSTEM_UI_FLAG_HIDE_NAVIGATION   | 
    view.SYSTEM_UI_FLAG_LAYOUT_STABLE | view.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | view.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);               
   }
+
+
+  
 
   
 }

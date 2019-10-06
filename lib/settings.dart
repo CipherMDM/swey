@@ -238,6 +238,17 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 )
                               : Center(),
+                          
+                         
+                        ],
+                      )),
+                ),
+                 Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Material(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Column(children: <Widget>[
+
                           (SettingsConfig.display == "Allow" &&
                                       _controller.text.isEmpty) ||
                                   (_controller.text.isNotEmpty &&
@@ -269,7 +280,8 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 )
                               : Center(),
-                          (SettingsConfig.sound == "Allow" &&
+
+                               (SettingsConfig.sound == "Allow" &&
                                       _controller.text.isEmpty) ||
                                   (_controller.text.isNotEmpty &&
                                       SettingsConfig.sound == "Allow" &&
@@ -300,9 +312,8 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 )
                               : Center(),
-                        ],
-                      )),
-                ),
+                     
+                        ]))),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Material(

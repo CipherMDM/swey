@@ -730,7 +730,121 @@ class _NormalSetUpState extends State<NormalSetUp> {
                               },
                             )
                           : Center(),
-                      (_controller.text.isEmpty ||
+                      
+                    
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Material(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Column(children: <Widget>[
+
+                          (_controller.text.isEmpty ||
+                              "display"
+                                  .startsWith(_controller.text.toLowerCase()))
+                          ? ListTile(
+                              leading:
+                                  Icon(Icons.tv, color: Colors.orangeAccent),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Display",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    SettingsConfig.display != null
+                                        ? SettingsConfig.display
+                                        : "",
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        color: SettingsConfig.display == "Allow"
+                                            ? Colors.red
+                                            : SettingsConfig.display == "Deny"
+                                                ? Colors.blue
+                                                : Colors.transparent),
+                                  ),
+                                ],
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.black,
+                                size: 15,
+                              ),
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => CupertinoAlertDialog(
+                                          title: Text("Display"),
+                                          actions: <Widget>[
+                                            CupertinoDialogAction(
+                                                child: Text("Deny"),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    SettingsConfig.display =
+                                                        "Deny";
+                                                    store
+                                                        .record("Display")
+                                                        .exists(db_handler.db)
+                                                        .then((exist) {
+                                                      if (exist) {
+                                                        store
+                                                            .record("Display")
+                                                            .update(
+                                                                db_handler.db,
+                                                                "Deny");
+                                                      } else {
+                                                        store
+                                                            .record("Display")
+                                                            .add(db_handler.db,
+                                                                "Deny");
+                                                      }
+                                                    });
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                }),
+                                            CupertinoDialogAction(
+                                                child: Text(
+                                                  "Allow",
+                                                  style: TextStyle(
+                                                      color: Colors.red),
+                                                ),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    SettingsConfig.display =
+                                                        "Allow";
+                                                    store
+                                                        .record("Display")
+                                                        .exists(db_handler.db)
+                                                        .then((exist) {
+                                                      if (exist) {
+                                                        store
+                                                            .record("Display")
+                                                            .update(
+                                                                db_handler.db,
+                                                                "Allow");
+                                                      } else {
+                                                        store
+                                                            .record("Display")
+                                                            .add(db_handler.db,
+                                                                "Allow");
+                                                      }
+                                                    });
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                }),
+                                          ],
+                                        ));
+                              },
+                            )
+                          : Center(),
+
+                          (_controller.text.isEmpty ||
                               "sound"
                                   .startsWith(_controller.text.toLowerCase()))
                           ? ListTile(
@@ -832,30 +946,30 @@ class _NormalSetUpState extends State<NormalSetUp> {
                             )
                           : Center(),
 
-                      (_controller.text.isEmpty ||
-                              "display"
+                          (_controller.text.isEmpty ||
+                              "notification panel"
                                   .startsWith(_controller.text.toLowerCase()))
                           ? ListTile(
-                              leading:
-                                  Icon(Icons.tv, color: Colors.orangeAccent),
+                              leading: Icon(Icons.notifications,
+                                  color: Colors.pink),
                               title: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    "Display",
+                                     "Notification panel",
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    SettingsConfig.display != null
-                                        ? SettingsConfig.display
+                                    SettingsConfig.notification_panel != null
+                                        ? SettingsConfig.notification_panel
                                         : "",
                                     style: TextStyle(
                                         fontSize: 13,
-                                        color: SettingsConfig.display == "Allow"
+                                        color: SettingsConfig.notification_panel == "Allow"
                                             ? Colors.red
-                                            : SettingsConfig.display == "Deny"
+                                            : SettingsConfig.notification_panel == "Deny"
                                                 ? Colors.blue
                                                 : Colors.transparent),
                                   ),
@@ -870,27 +984,27 @@ class _NormalSetUpState extends State<NormalSetUp> {
                                 showDialog(
                                     context: context,
                                     builder: (context) => CupertinoAlertDialog(
-                                          title: Text("Display"),
+                                          title: Text("Notification Panel"),
                                           actions: <Widget>[
                                             CupertinoDialogAction(
                                                 child: Text("Deny"),
                                                 onPressed: () {
                                                   setState(() {
-                                                    SettingsConfig.display =
+                                                    SettingsConfig.notification_panel =
                                                         "Deny";
                                                     store
-                                                        .record("Display")
+                                                        .record("notifi")
                                                         .exists(db_handler.db)
                                                         .then((exist) {
                                                       if (exist) {
                                                         store
-                                                            .record("Display")
+                                                            .record("notifi")
                                                             .update(
                                                                 db_handler.db,
                                                                 "Deny");
                                                       } else {
                                                         store
-                                                            .record("Display")
+                                                            .record("notifi")
                                                             .add(db_handler.db,
                                                                 "Deny");
                                                       }
@@ -906,21 +1020,21 @@ class _NormalSetUpState extends State<NormalSetUp> {
                                                 ),
                                                 onPressed: () {
                                                   setState(() {
-                                                    SettingsConfig.display =
+                                                    SettingsConfig.notification_panel =
                                                         "Allow";
                                                     store
-                                                        .record("Display")
+                                                        .record("notifi")
                                                         .exists(db_handler.db)
                                                         .then((exist) {
                                                       if (exist) {
                                                         store
-                                                            .record("Display")
+                                                            .record("notifi")
                                                             .update(
                                                                 db_handler.db,
                                                                 "Allow");
                                                       } else {
                                                         store
-                                                            .record("Display")
+                                                            .record("notifi")
                                                             .add(db_handler.db,
                                                                 "Allow");
                                                       }
@@ -933,10 +1047,9 @@ class _NormalSetUpState extends State<NormalSetUp> {
                               },
                             )
                           : Center(),
-                    ],
-                  ),
-                ),
-              ),
+                       
+                        
+                      ]))),
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Material(
